@@ -6,14 +6,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.navigation.Navigation
 import com.harnet.whatisthedistance.viewModel.MeasureViewModel
 import com.harnet.whatisthedistance.R
+import kotlinx.android.synthetic.main.measure_fragment.*
 
 class MeasureFragment : Fragment() {
-
-    companion object {
-        fun newInstance() = MeasureFragment()
-    }
 
     private lateinit var viewModel: MeasureViewModel
 
@@ -24,10 +23,14 @@ class MeasureFragment : Fragment() {
         return inflater.inflate(R.layout.measure_fragment, container, false)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this).get(MeasureViewModel::class.java)
-        // TODO: Use the ViewModel
-    }
 
+        stations_list_btn.setOnClickListener {
+            Toast.makeText(context, "Go to stations", Toast.LENGTH_SHORT).show()
+            val action = MeasureFragmentDirections.actionMeasureFragmentToStationsListFragment()
+            Navigation.findNavController(view).navigate(action)
+        }
+    }
 }

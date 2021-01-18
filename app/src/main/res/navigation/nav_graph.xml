@@ -9,5 +9,27 @@
         android:id="@+id/measureFragment"
         android:name="com.harnet.whatisthedistance.view.MeasureFragment"
         android:label="measure_fragment"
-        tools:layout="@layout/measure_fragment" />
+        tools:layout="@layout/measure_fragment" >
+        <action
+            android:id="@+id/action_measureFragment_to_stationsListFragment"
+            app:destination="@id/stationsListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/stationsListFragment"
+        android:name="com.harnet.whatisthedistance.view.StationsListFragment"
+        android:label="stations_list_fragment"
+        tools:layout="@layout/stations_list_fragment" >
+        <action
+            android:id="@+id/action_stationsListFragment_to_stationFragment"
+            app:destination="@id/stationFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/stationFragment"
+        android:name="com.harnet.whatisthedistance.view.StationFragment"
+        android:label="station_fragment"
+        tools:layout="@layout/station_fragment" >
+        <argument
+            android:name="stationId"
+            app:argType="integer" />
+    </fragment>
 </navigation>
