@@ -14,8 +14,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:visibility="invisible"
-        android:background="@color/purple_200"/>
+        android:visibility="invisible"/>
 
     <ProgressBar
         android:id="@+id/stationsList_progressBar"
