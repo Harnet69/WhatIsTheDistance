@@ -27,7 +27,7 @@ class StationsListFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(StationsListViewModel::class.java)
-        // TODO: Use the ViewModel
-    }
 
+        viewModel.refreshFromAPI()
+    }
 }
