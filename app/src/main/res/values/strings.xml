@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">What Is The Distance</string>
+    <string name="error_stations_data_loading">Error with stations data loading</string>
 </resources>

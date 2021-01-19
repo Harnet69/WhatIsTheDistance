@@ -29,9 +29,9 @@ class StationsListViewModel(application: Application) : BaseViewModel(applicatio
     val mStationsLoading = MutableLiveData<Boolean>()
 
     // retrieve dogs and set UI components. Can work separately from DB
-    private fun retrieveDogs(dogsList: List<Station>) {
+    private fun retrieveStations(stationsList: List<Station>) {
         // set received list to observable mutable list
-        mStations.postValue(dogsList)
+        mStations.postValue(stationsList)
         // switch off error message
         mStationsLoadError.postValue(false)
         // switch off waiting spinner
@@ -70,7 +70,7 @@ class StationsListViewModel(application: Application) : BaseViewModel(applicatio
                     override fun onSuccess(stationsList: List<Station>) {
                         //store this information and time of retrieving in a db as a cache
                         //TODO implement storing in database every 24 hours
-                        Log.i("StationsList", "StationsList: $stationsList")
+                        retrieveStations(stationsList)
 //                        storeDogInDatabase(dogsList)
 //                        SharedPreferencesHelper.invoke(getApplication()).saveTimeOfUpd(System.nanoTime())
                     }
