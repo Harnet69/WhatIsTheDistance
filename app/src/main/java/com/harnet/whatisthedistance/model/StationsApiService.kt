@@ -9,7 +9,7 @@ class StationsApiService {
     // base URL of the API
     private val BASE_URL = "https://koleo.pl"
     // object created by Retrofit for accessing to an endpoint
-    private val api =  Retrofit.Builder()
+    private val stationsApi =  Retrofit.Builder()
         .baseUrl(BASE_URL)
         // handle all basic communication, separate threads, errors and converts JSON to object of our class
         .addConverterFactory(GsonConverterFactory.create())
@@ -18,8 +18,22 @@ class StationsApiService {
         .build()
         .create(StationsAPI::class.java)// create model class
 
-    //get observable List from API
+    private val stationsKeywordsApi =  Retrofit.Builder()
+        .baseUrl(BASE_URL)
+        // handle all basic communication, separate threads, errors and converts JSON to object of our class
+        .addConverterFactory(GsonConverterFactory.create())
+        // convert this object to observable Single<List<>>
+        .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+        .build()
+        .create(StationsKeywordsAPI::class.java)// create model class
+
+    //get observable List of stations from API
     fun getStations(): Single<List<Station>> {
-        return api.getStations()
+        return stationsApi.getStations()
+    }
+
+    //get observable List of stations keywords from API
+    fun getStationsKeywords(): Single<List<StationKeyword>> {
+        return stationsKeywordsApi.getStationsKeywords()
     }
 }
