@@ -44,8 +44,8 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="@{station.latitude}"
-            android:lines="1"/>
+            android:lines="1"
+            android:text="@{station.latitude}" />
 
         <TextView
             android:id="@+id/station_lon"
@@ -53,7 +53,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="@{station.longitude}"
-            android:lines="1"/>
+            android:lines="1"
+            android:text="@{station.longitude}" />
     </LinearLayout>
 </layout>
