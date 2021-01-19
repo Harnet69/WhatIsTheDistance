@@ -96,7 +96,8 @@ class MeasureFragment : Fragment() {
             if (dep_st.text.toString() != "" && arr_st.text.toString() != "") {
                 if (viewModel.isUserStationInStationsKeywords(dep_st.text.toString()) == true) {
                     if (viewModel.isUserStationInStationsKeywords(arr_st.text.toString()) == true) {
-                        Log.i("Calculate", "Calculation: ")
+
+                        viewModel.calculateDistance(dep_st.text.toString(), arr_st.text.toString())
                     } else {
                         Toast.makeText(context, "Departure is unknown", Toast.LENGTH_SHORT).show()
                     }
@@ -109,7 +110,5 @@ class MeasureFragment : Fragment() {
         }
     }
 
-    private fun calculateDistance(depId: Int, arrId: Int) {
 
-    }
 }

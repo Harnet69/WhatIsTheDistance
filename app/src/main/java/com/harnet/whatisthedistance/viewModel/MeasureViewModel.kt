@@ -1,6 +1,7 @@
 package com.harnet.whatisthedistance.viewModel
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.harnet.whatisthedistance.model.Station
 import com.harnet.whatisthedistance.model.StationKeyword
@@ -94,9 +95,16 @@ class MeasureViewModel(application: Application) : BaseViewModel(application) {
         return mStationsKeywords.value?.any { station -> station.keyword == userStationsName }
     }
 
-    fun getStationIdByKeyword(stationKeyword: String, stationsKeywordsList: ArrayList<StationKeyword>): List<StationKeyword> {
-        return stationsKeywordsList.filter { station -> station.keyword == stationKeyword }
+    fun getStationIdByKeyword(stationKeyword: String): Int? {
+        val stations =  mStationsKeywords.value?.filter { station -> station.keyword == stationKeyword }
+        return stations?.get(0)?.station_id
      }
+
+    fun calculateDistance(depKeyword: String, arrKeyword: String) {
+        val depId = getStationIdByKeyword(depKeyword)
+        val arrId = getStationIdByKeyword(arrKeyword)
+        Log.i("DepArr", "calculateDistance: $depId / ${arrId}")
+    }
 
     override fun onCleared() {
         super.onCleared()
