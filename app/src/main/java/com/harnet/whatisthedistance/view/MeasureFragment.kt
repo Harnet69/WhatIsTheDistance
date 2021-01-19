@@ -13,6 +13,7 @@ import androidx.navigation.Navigation
 import com.harnet.whatisthedistance.viewModel.MeasureViewModel
 import com.harnet.whatisthedistance.R
 import kotlinx.android.synthetic.main.measure_fragment.*
+import kotlinx.android.synthetic.main.stations_list_fragment.*
 
 class MeasureFragment : Fragment() {
     private lateinit var viewModel: MeasureViewModel
@@ -41,7 +42,15 @@ class MeasureFragment : Fragment() {
 
     private fun observeViewModel(){
         viewModel.mStations.observe(viewLifecycleOwner, Observer { stationsList ->
+            measure_progressBar.visibility = View.INVISIBLE
             Log.i("StationsList", "observeViewModel: $stationsList")
+        })
+
+        viewModel.mErrorMsg.observe(viewLifecycleOwner, Observer { e ->
+            if(e != null){
+                measure_progressBar.visibility = View.INVISIBLE
+                measure_error_msg.text = e
+            }
         })
     }
 }
