@@ -28,7 +28,7 @@ class StationsListViewModel(application: Application) : BaseViewModel(applicatio
     // listening is data loading
     val mStationsLoading = MutableLiveData<Boolean>()
 
-    // retrieve dogs and set UI components. Can work separately from DB
+    // retrieve stations     and set UI components. Can work separately from DB
     private fun retrieveStations(stationsList: List<Station>) {
         // set received list to observable mutable list
         mStations.postValue(stationsList)
@@ -41,7 +41,6 @@ class StationsListViewModel(application: Application) : BaseViewModel(applicatio
     //refresh information from remote API
     fun refreshFromAPI() {
         fetchFromRemoteWithRetrofit()
-        Toast.makeText(getApplication(), "Try to get data from API", Toast.LENGTH_SHORT).show()
         // notification
 //        NotificationsHelper(getApplication()).createNotification()
     }
