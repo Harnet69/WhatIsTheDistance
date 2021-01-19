@@ -3,6 +3,8 @@ package com.harnet.whatisthedistance.viewModel
 import android.app.Application
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.SphericalUtil
 import com.harnet.whatisthedistance.model.Station
 import com.harnet.whatisthedistance.model.StationKeyword
 import com.harnet.whatisthedistance.model.StationsApiService
@@ -95,15 +97,35 @@ class MeasureViewModel(application: Application) : BaseViewModel(application) {
         return mStationsKeywords.value?.any { station -> station.keyword == userStationsName }
     }
 
-    fun getStationIdByKeyword(stationKeyword: String): Int? {
-        val stations =  mStationsKeywords.value?.filter { station -> station.keyword == stationKeyword }
+    private fun getStationIdByKeyword(stationKeyword: String): Int? {
+        val stations =
+            mStationsKeywords.value?.filter { station -> station.keyword == stationKeyword }
         return stations?.get(0)?.station_id
-     }
+    }
 
-    fun calculateDistance(depKeyword: String, arrKeyword: String) {
+    private fun getStationCoords(stationId: Int): LatLng? {
+        val station = mStations.value?.filter { it -> it.id == stationId }
+        var statLat: Double? = null
+        var statLon: Double? = null
+        if (station != null && station.isNotEmpty()) {
+            statLat = station[0].latitude
+            statLon = station[0].longitude
+        }
+        if (statLat != null && statLon != null) {
+            return LatLng(statLat, statLon)
+        }
+        return null
+    }
+
+    fun calculateDistance(depKeyword: String, arrKeyword: String): Double? {
         val depId = getStationIdByKeyword(depKeyword)
         val arrId = getStationIdByKeyword(arrKeyword)
-        Log.i("DepArr", "calculateDistance: $depId / ${arrId}")
+        val depCoords = depId?.let { getStationCoords(it) }
+        val arrCoords = arrId?.let { getStationCoords(it) }
+        if (depCoords != null && arrCoords != null) {
+            return SphericalUtil.computeDistanceBetween(depCoords, arrCoords) / 1000
+        }
+        return null
     }
 
     override fun onCleared() {

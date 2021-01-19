@@ -13,9 +13,9 @@ class Station(
     @ColumnInfo(name = "name_slug")
     val name_slug: String,
     @ColumnInfo(name = "latitude")
-    val latitude: String?,
+    val latitude: Double?,
     @ColumnInfo(name = "longitude")
-    val longitude: String?,
+    val longitude: Double?,
     @ColumnInfo(name = "hits")
     val hits: String,
     @ColumnInfo(name = "ibnr")

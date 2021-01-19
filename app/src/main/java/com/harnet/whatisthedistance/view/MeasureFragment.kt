@@ -96,8 +96,13 @@ class MeasureFragment : Fragment() {
             if (dep_st.text.toString() != "" && arr_st.text.toString() != "") {
                 if (viewModel.isUserStationInStationsKeywords(dep_st.text.toString()) == true) {
                     if (viewModel.isUserStationInStationsKeywords(arr_st.text.toString()) == true) {
-
-                        viewModel.calculateDistance(dep_st.text.toString(), arr_st.text.toString())
+                        // TODO calculate distance
+                        val distance = viewModel.calculateDistance(dep_st.text.toString(), arr_st.text.toString())
+                        if(distance != null){
+                            Toast.makeText(context, "Distance: $distance", Toast.LENGTH_SHORT).show()
+                        }else{
+                            Toast.makeText(context, "Distance can't be calculated", Toast.LENGTH_SHORT).show()
+                        }
                     } else {
                         Toast.makeText(context, "Departure is unknown", Toast.LENGTH_SHORT).show()
                     }
