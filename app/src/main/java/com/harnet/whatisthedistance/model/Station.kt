@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 @Entity
 class Station(
     @ColumnInfo(name = "station_id")
-    val id: String,
+    val id: Int,
     @ColumnInfo(name = "station_name")
     val name: String,
     @ColumnInfo(name = "name_slug")

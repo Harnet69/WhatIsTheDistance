@@ -49,7 +49,6 @@ class StationsListFragment : Fragment() {
             // notify adapter
             stations_list_recyclerView.visibility = View.VISIBLE
             stationsList_progressBar.visibility = View.INVISIBLE
-            Log.i("StationsList", "StationsList arrived: $stationsList")
             stationsListAdapter.updateStationsList(stationsList as ArrayList<Station>)
         })
 

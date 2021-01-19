@@ -70,8 +70,8 @@ class StationsListViewModel(application: Application) : BaseViewModel(applicatio
                     override fun onSuccess(stationsList: List<Station>) {
                         //store this information and time of retrieving in a db as a cache
                         //TODO implement storing in database every 24 hours
-                        retrieveStations(stationsList)
-//                        storeDogInDatabase(dogsList)
+                        retrieveStations(sortById(stationsList as ArrayList<Station>))
+//                        storeDogInDatabase(stationsList)
 //                        SharedPreferencesHelper.invoke(getApplication()).saveTimeOfUpd(System.nanoTime())
                     }
 
@@ -85,6 +85,11 @@ class StationsListViewModel(application: Application) : BaseViewModel(applicatio
                     }
                 })
         )
+    }
+
+    // sorted stations by it id
+    private fun sortById(stationsList: ArrayList<Station>): ArrayList<Station>{
+        return stationsList.sortedBy { it.id}.toCollection(ArrayList<Station>())
     }
 
     override fun onCleared() {
