@@ -49,7 +49,8 @@ class MeasureFragment : Fragment() {
         viewModel.mErrorMsg.observe(viewLifecycleOwner, Observer { e ->
             if(e != null){
                 measure_progressBar.visibility = View.INVISIBLE
-                measure_error_msg.text = e
+                measure_error_msg.text = "Smth wrong $e"
+                measure_error_msg.visibility = View.VISIBLE
             }
         })
     }
