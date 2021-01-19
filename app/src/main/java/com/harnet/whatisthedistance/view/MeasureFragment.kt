@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
+import android.widget.Button
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -43,18 +44,18 @@ class MeasureFragment : Fragment() {
         observeViewModel()
     }
 
-    private fun observeViewModel(){
+    private fun observeViewModel() {
         viewModel.mStations.observe(viewLifecycleOwner, Observer { stationsList ->
             measure_progressBar.visibility = View.INVISIBLE
-            Log.i("StationsList", "Stations: $stationsList")
         })
 
         viewModel.mStationsKeywords.observe(viewLifecycleOwner, Observer { stationsKeywordsList ->
             measure_progressBar.visibility = View.INVISIBLE
-            Log.i("StationsList", "Stations keywords: ${stationsKeywordsList[0].keyword}")
             search_block_measureFragment.visibility = View.VISIBLE
             setToAutoComplete(dep_st, stationsKeywordsList)
             setToAutoComplete(arr_st, stationsKeywordsList)
+
+            addDistanceBtn()
         })
 
         viewModel.mErrorMsg.observe(viewLifecycleOwner, Observer { e ->
@@ -67,15 +68,48 @@ class MeasureFragment : Fragment() {
         })
     }
 
-    private fun setToAutoComplete(autoCompleteTextView: AutoCompleteTextView, stationsKeywords: ArrayList<StationKeyword>){
+    //TODO implement a listener of a field completing, abter which distance button arriving
+
+    private fun setToAutoComplete(
+        autoCompleteTextView: AutoCompleteTextView,
+        stationsKeywords: ArrayList<StationKeyword>
+    ) {
         val stationsKeywordsList = arrayListOf<String>()
-        for(station in stationsKeywords){
+        for (station in stationsKeywords) {
             stationsKeywordsList.add(station.keyword)
         }
 
-        val arrayAdapter = context?.let { ArrayAdapter<String>(it, android.R.layout.simple_list_item_1, stationsKeywordsList) }
-
+        val arrayAdapter = context?.let {
+            ArrayAdapter<String>(
+                it,
+                android.R.layout.simple_list_item_1,
+                stationsKeywordsList
+            )
+        }
         autoCompleteTextView.setAdapter(arrayAdapter)
         autoCompleteTextView.threshold = 1
+    }
+
+    private fun addDistanceBtn() {
+        calc_btn.setOnClickListener {
+            it.visibility = View.VISIBLE
+            if (dep_st.text.toString() != "" && arr_st.text.toString() != "") {
+                if (viewModel.isUserStationInStationsKeywords(dep_st.text.toString()) == true) {
+                    if (viewModel.isUserStationInStationsKeywords(arr_st.text.toString()) == true) {
+                        Log.i("Calculate", "Calculation: ")
+                    } else {
+                        Toast.makeText(context, "Departure is unknown", Toast.LENGTH_SHORT).show()
+                    }
+                } else {
+                    Toast.makeText(context, "Departure is unknown", Toast.LENGTH_SHORT).show()
+                }
+            } else {
+                Toast.makeText(context, "Fill both fields", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun calculateDistance(depId: Int, arrId: Int) {
+
     }
 }

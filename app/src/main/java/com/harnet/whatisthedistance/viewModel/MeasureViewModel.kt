@@ -90,6 +90,14 @@ class MeasureViewModel(application: Application) : BaseViewModel(application) {
         )
     }
 
+    fun isUserStationInStationsKeywords(userStationsName: String): Boolean? {
+        return mStationsKeywords.value?.any { station -> station.keyword == userStationsName }
+    }
+
+    fun getStationIdByKeyword(stationKeyword: String, stationsKeywordsList: ArrayList<StationKeyword>): List<StationKeyword> {
+        return stationsKeywordsList.filter { station -> station.keyword == stationKeyword }
+     }
+
     override fun onCleared() {
         super.onCleared()
         disposable.clear()
