@@ -33,12 +33,6 @@ class MeasureFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this).get(MeasureViewModel::class.java)
 
-        stations_list_btn.setOnClickListener {
-            Toast.makeText(context, "Go to stations", Toast.LENGTH_SHORT).show()
-            val action = MeasureFragmentDirections.actionMeasureFragmentToStationsListFragment()
-            Navigation.findNavController(view).navigate(action)
-        }
-
         viewModel.refresh()
 
         observeViewModel()

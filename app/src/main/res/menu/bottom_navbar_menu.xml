@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/measureFragment"
+        android:contentDescription="@string/measuring_fragment"
+        android:icon="@drawable/ic_distance"
+        android:title="@string/measure"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/stationsListFragment"
+        android:contentDescription="@string/stations_list"
+        android:icon="@drawable/ic_stations"
+        android:title="@string/stations"
+        app:showAsAction="ifRoom" />
+
+</menu>
