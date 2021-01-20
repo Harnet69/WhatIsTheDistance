@@ -20,35 +20,35 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="Id"
+            android:text="@string/id"
             style="@style/stations_list_header"/>
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="3"
-            android:text="Name"
+            android:text="@string/name"
             style="@style/stations_list_header"/>
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="2"
-            android:text="Country"
+            android:text="@string/country"
             style="@style/stations_list_header"/>
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="Lat"
+            android:text="@string/lat"
             style="@style/stations_list_header"/>
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="Lon"
+            android:text="@string/lon"
             style="@style/stations_list_header"/>
 
     </LinearLayout>

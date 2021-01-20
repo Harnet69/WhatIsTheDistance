@@ -8,4 +8,9 @@
     <string name="stations_list">Stations list</string>
     <string name="stations">Stations</string>
     <string name="distance">Distance</string>
+    <string name="id">Id</string>
+    <string name="name">Name</string>
+    <string name="country">Country</string>
+    <string name="lat">Lat</string>
+    <string name="lon">Lon</string>
 </resources>
