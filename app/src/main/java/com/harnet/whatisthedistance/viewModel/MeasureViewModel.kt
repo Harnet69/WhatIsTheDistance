@@ -12,6 +12,7 @@ import com.harnet.whatisthedistance.model.StationKeyword
 import com.harnet.whatisthedistance.model.StationsApiService
 import com.harnet.whatisthedistance.model.StationsKeywordsDatabase
 import com.harnet.whatisthedistance.util.SharedPreferencesHelper
+import com.harnet.whatisthedistance.util.isOnline
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableSingleObserver
@@ -34,8 +35,10 @@ class MeasureViewModel(application: Application) : BaseViewModel(application) {
     val mErrorMsg = MutableLiveData<String>()
 
     fun refresh() {
-        // TODO implement the time check
-        if (isTimeForUpd()) {
+        // is time to update time check
+        //TODO chack Internet connection
+        val isInternet = isOnline(getApplication())
+        if (isTimeForUpd() && isInternet) {
             refreshFromApi()
         } else {
             refreshFromDb()
