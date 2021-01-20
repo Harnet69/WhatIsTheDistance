@@ -8,7 +8,7 @@ import com.harnet.whatisthedistance.model.Station
 @Dao
 interface StationsDAO {
     @Insert
-    suspend fun insertAll(vararg stations: Station): List<Long> // dogs is an expanded list of individual elements!!!
+    suspend fun insertAll(vararg stations: Station): List<Long> // stations is an expanded list of individual elements!!!
 
     @Query("SELECT * FROM station")
     suspend fun getAllStations(): List<Station>

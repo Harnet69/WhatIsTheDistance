@@ -9,6 +9,7 @@ import com.harnet.dogbreeds.model.StationsDatabase
 import com.harnet.whatisthedistance.model.Station
 import com.harnet.whatisthedistance.model.StationKeyword
 import com.harnet.whatisthedistance.model.StationsApiService
+import com.harnet.whatisthedistance.model.StationsKeywordsDatabase
 import com.harnet.whatisthedistance.util.SharedPreferencesHelper
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -90,9 +91,8 @@ class MeasureViewModel(application: Application) : BaseViewModel(application) {
                 .subscribeWith(object : DisposableSingleObserver<List<StationKeyword>>() {
                     override fun onSuccess(stationsKeywordsList: List<StationKeyword>) {
                         //TODO implement storing in database every 24 hours
-                        retrieveStationsKeywords(stationsKeywordsList as ArrayList<StationKeyword>)
-//                        storeStationsInDatabase(stationsList)
-//                        SharedPreferencesHelper.invoke(getApplication()).saveTimeOfUpd(System.nanoTime())
+                        storeStationsKeywordsInDatabase(stationsKeywordsList)
+                        SharedPreferencesHelper.invoke(getApplication()).saveTimeOfUpd(System.nanoTime())
                     }
 
                     // get an error
@@ -104,7 +104,7 @@ class MeasureViewModel(application: Application) : BaseViewModel(application) {
         )
     }
 
-    // initiate and handle data in database
+    // initiate and handle data in stations database
     private fun storeStationsInDatabase(stationsList: List<Station>) {
         //launch code in separate thread in Coroutine scope
         launch {
@@ -118,6 +118,23 @@ class MeasureViewModel(application: Application) : BaseViewModel(application) {
             }
             Log.i("StationsInDb", "storeStationsInDatabase: ")
             retrieveStations(stationsList as ArrayList<Station>)
+        }
+    }
+
+    // initiate and handle data in stations keywords database
+    private fun storeStationsKeywordsInDatabase(stationsKeywordsList: List<StationKeyword>) {
+        //launch code in separate thread in Coroutine scope
+        launch {
+            val dao = StationsKeywordsDatabase(getApplication()).stationsKeywordsDAO()
+            dao.deleteAllStationsKeywords()
+            // argument is an expanded list of individual elements
+            val result = dao.insertAll(*stationsKeywordsList.toTypedArray())
+            // update receiver list with assigning uuId to the right objects
+            for (i in stationsKeywordsList.indices) {
+                stationsKeywordsList[i].uuid = result[i].toInt()
+            }
+            Log.i("StationsInDb", "storeStationsKeywordsInDatabase: ")
+            retrieveStationsKeywords(stationsKeywordsList as ArrayList<StationKeyword>)
         }
     }
 
