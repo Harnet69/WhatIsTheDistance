@@ -20,10 +20,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class MeasureViewModel(application: Application) : BaseViewModel(application) {
-    private var updateTime: Long = 1L
-
-    // helper for SharedPreferences functionality
-    private var sharedPrefHelper = SharedPreferencesHelper(getApplication())
+    // time of refreshing from API
+    private val UPDATE_TIME: Long = 10000L
 
     private val stationsApiService = StationsApiService()
     private val disposable = CompositeDisposable()
@@ -35,7 +33,7 @@ class MeasureViewModel(application: Application) : BaseViewModel(application) {
 
     fun refresh() {
         // TODO implement the time check
-        if (false) {
+        if (isTimeForUpd()) {
             refreshFromApi()
         } else {
             refreshFromDb()
@@ -98,7 +96,7 @@ class MeasureViewModel(application: Application) : BaseViewModel(application) {
                         //TODO implement storing in database every 24 hours
                         storeStationsInDatabase(stationsList)
                         SharedPreferencesHelper.invoke(getApplication())
-                            .saveTimeOfUpd(System.nanoTime())
+                            .saveTimeOfUpd(System.currentTimeMillis())
                     }
 
                     // get an error
@@ -122,7 +120,7 @@ class MeasureViewModel(application: Application) : BaseViewModel(application) {
                         //TODO implement storing in database every 24 hours
                         storeStationsKeywordsInDatabase(stationsKeywordsList)
                         SharedPreferencesHelper.invoke(getApplication())
-                            .saveTimeOfUpd(System.nanoTime())
+                            .saveTimeOfUpd(System.currentTimeMillis())
                     }
 
                     // get an error
@@ -146,7 +144,7 @@ class MeasureViewModel(application: Application) : BaseViewModel(application) {
             for (i in stationsList.indices) {
                 stationsList[i].uuid = result[i].toInt()
             }
-            Log.i("StationsInDb", "storeStationsInDatabase: ")
+
             retrieveStations(stationsList as ArrayList<Station>)
         }
     }
@@ -163,7 +161,7 @@ class MeasureViewModel(application: Application) : BaseViewModel(application) {
             for (i in stationsKeywordsList.indices) {
                 stationsKeywordsList[i].uuid = result[i].toInt()
             }
-            Log.i("StationsInDb", "storeStationsKeywordsInDatabase: ")
+
             retrieveStationsKeywords(stationsKeywordsList as ArrayList<StationKeyword>)
         }
     }
@@ -189,6 +187,16 @@ class MeasureViewModel(application: Application) : BaseViewModel(application) {
         }
     }
 
+    // check if it's the time for update from API
+    private fun isTimeForUpd(): Boolean {
+        val lastUpd = SharedPreferencesHelper.invoke(getApplication()).getLastUpdateTime()
+        if (lastUpd != 0L) {
+            if (lastUpd != null) {
+                return (lastUpd + UPDATE_TIME) < System.currentTimeMillis()
+            }
+        }
+        return true
+    }
 
     fun isUserStationInStationsKeywords(userStationsName: String): Boolean? {
         return mStationsKeywords.value?.any { station -> station.keyword == userStationsName }
