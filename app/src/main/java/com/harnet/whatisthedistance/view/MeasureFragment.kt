@@ -1,21 +1,17 @@
 package com.harnet.whatisthedistance.view
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
-import android.widget.Button
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.Navigation
 import com.harnet.whatisthedistance.R
 import com.harnet.whatisthedistance.model.StationKeyword
-import com.harnet.whatisthedistance.util.SharedPreferencesHelper
 import com.harnet.whatisthedistance.viewModel.MeasureViewModel
 import kotlinx.android.synthetic.main.measure_fragment.*
 
@@ -34,7 +30,7 @@ class MeasureFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this).get(MeasureViewModel::class.java)
 
-        viewModel.refresh()
+        viewModel.refreshFromApi()
 
         observeViewModel()
     }

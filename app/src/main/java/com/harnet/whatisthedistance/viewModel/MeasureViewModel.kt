@@ -31,8 +31,24 @@ class MeasureViewModel(application: Application) : BaseViewModel(application) {
     val mIsLoading = MutableLiveData<Boolean>()
     val mErrorMsg = MutableLiveData<String>()
 
-    fun refresh() {
+    // TODO when the time to update from API
+    fun refreshFromApi() {
         getDataFromAPIs()
+    }
+
+    // TODO when lost less when 24 hours
+    fun refreshFromDb() {
+        getDataFromAPIs()
+    }
+
+    private fun getDataFromAPIs(){
+        getStationsFromApi()
+        getStationsKeywordsFromApi()
+    }
+
+    private fun getDataFromDbs(){
+        fetchStationsFromDatabase()
+        fetchStationsKeywordsFromDatabase()
     }
 
     private fun retrieveStations(stationsList: ArrayList<Station>) {
@@ -42,11 +58,6 @@ class MeasureViewModel(application: Application) : BaseViewModel(application) {
         mErrorMsg.postValue(null)
         // switch off waiting spinner
         mIsLoading.postValue(false)
-    }
-
-    private fun getDataFromAPIs(){
-        getStationsFromApi()
-        getStationsKeywordsFromApi()
     }
 
     private fun retrieveStationsKeywords(stationsKeywordsList: ArrayList<StationKeyword>) {
@@ -135,6 +146,24 @@ class MeasureViewModel(application: Application) : BaseViewModel(application) {
             }
             Log.i("StationsInDb", "storeStationsKeywordsInDatabase: ")
             retrieveStationsKeywords(stationsKeywordsList as ArrayList<StationKeyword>)
+        }
+    }
+
+    // TODO when last less when 24 hours after the last update form API
+    // get data from stations database
+    private fun fetchStationsFromDatabase(){
+        launch {
+            val stationsFromDb = StationsDatabase.invoke(getApplication()).stationDAO().getAllStations()
+            retrieveStations(stationsFromDb as ArrayList<Station>)
+        }
+    }
+
+    // TODO when last less when 24 hours after the last update form API
+    // get data from stations kezwords database
+    private fun fetchStationsKeywordsFromDatabase(){
+        launch {
+            val stationsKeywordsFromDb = StationsKeywordsDatabase.invoke(getApplication()).stationsKeywordsDAO().getAllStationsKeywords()
+            retrieveStationsKeywords(stationsKeywordsFromDb as ArrayList<StationKeyword>)
         }
     }
 
