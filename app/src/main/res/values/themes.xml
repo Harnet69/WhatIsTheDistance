@@ -16,8 +16,15 @@
 
     <style name="station_item">
         <item name="android:textSize">15sp</item>
-        <item name="android:gravity">center_vertical</item>
+        <item name="android:gravity">center</item>
         <item name="android:layout_marginStart">5dp</item>
         <item name="android:layout_marginEnd">5dp</item>
+    </style>
+
+    <style name="stations_list_header">
+        <item name="android:textSize">17sp</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:textStyle">bold</item>
+
     </style>
 </resources>

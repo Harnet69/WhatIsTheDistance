@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.harnet.whatisthedistance.R
 import com.harnet.whatisthedistance.adapter.StationsListAdapter
@@ -42,6 +43,14 @@ class StationsListFragment : Fragment() {
             layoutManager = LinearLayoutManager(context)
             adapter = stationsListAdapter
         }
+
+        // add separation line between items
+        stations_list_recyclerView.addItemDecoration(
+            DividerItemDecoration(
+                stations_list_recyclerView.context,
+                DividerItemDecoration.VERTICAL
+            )
+        )
     }
 
     private fun observeViewModel(){
