@@ -59,7 +59,7 @@ class MeasureFragment : Fragment() {
         })
     }
 
-    //TODO implement a listener of a field completing, abter which distance button arriving
+    //TODO implement a listener of a field completing, after which distance button arriving
 
     private fun setToAutoComplete(
         autoCompleteTextView: AutoCompleteTextView,
@@ -90,7 +90,8 @@ class MeasureFragment : Fragment() {
                         // TODO calculate distance
                         val distance = viewModel.calculateDistance(dep_st.text.toString(), arr_st.text.toString())
                         if(distance != null){
-                            Toast.makeText(context, "Distance: $distance", Toast.LENGTH_SHORT).show()
+                            distance_res.text = viewModel.roundOffDecimal(distance).toString() + " km"
+//                            Toast.makeText(context, "Distance: $distance", Toast.LENGTH_SHORT).show()
                         }else{
                             Toast.makeText(context, "Distance can't be calculated", Toast.LENGTH_SHORT).show()
                         }

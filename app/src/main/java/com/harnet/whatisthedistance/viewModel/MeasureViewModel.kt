@@ -18,10 +18,12 @@ import io.reactivex.observers.DisposableSingleObserver
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.math.RoundingMode
+import java.text.DecimalFormat
 
 class MeasureViewModel(application: Application) : BaseViewModel(application) {
     // time of refreshing from API
-    private val UPDATE_TIME: Long = 10000L
+    private val UPDATE_TIME: Long = 12_000L
 
     private val stationsApiService = StationsApiService()
     private val disposable = CompositeDisposable()
@@ -231,6 +233,12 @@ class MeasureViewModel(application: Application) : BaseViewModel(application) {
             return SphericalUtil.computeDistanceBetween(depCoords, arrCoords) / 1000
         }
         return null
+    }
+
+    fun roundOffDecimal(number: Double): Double? {
+        val df = DecimalFormat("#.##")
+        df.roundingMode = RoundingMode.CEILING
+        return df.format(number).toDouble()
     }
 
     override fun onCleared() {
