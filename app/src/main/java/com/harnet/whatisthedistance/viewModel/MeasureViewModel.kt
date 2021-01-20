@@ -5,15 +5,23 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.SphericalUtil
+import com.harnet.dogbreeds.model.StationsDatabase
 import com.harnet.whatisthedistance.model.Station
 import com.harnet.whatisthedistance.model.StationKeyword
 import com.harnet.whatisthedistance.model.StationsApiService
+import com.harnet.whatisthedistance.util.SharedPreferencesHelper
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableSingleObserver
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.launch
 
 class MeasureViewModel(application: Application) : BaseViewModel(application) {
+    private var updateTime: Long = 1L
+
+    // helper for SharedPreferences functionality
+    private var sharedPrefHelper = SharedPreferencesHelper(getApplication())
+
     private val stationsApiService = StationsApiService()
     private val disposable = CompositeDisposable()
 
@@ -23,8 +31,7 @@ class MeasureViewModel(application: Application) : BaseViewModel(application) {
     val mErrorMsg = MutableLiveData<String>()
 
     fun refresh() {
-        getStationsFromApi()
-        getStationsKeywordsFromApi()
+        getDataFromAPIs()
     }
 
     private fun retrieveStations(stationsList: ArrayList<Station>) {
@@ -34,6 +41,11 @@ class MeasureViewModel(application: Application) : BaseViewModel(application) {
         mErrorMsg.postValue(null)
         // switch off waiting spinner
         mIsLoading.postValue(false)
+    }
+
+    private fun getDataFromAPIs(){
+        getStationsFromApi()
+        getStationsKeywordsFromApi()
     }
 
     private fun retrieveStationsKeywords(stationsKeywordsList: ArrayList<StationKeyword>) {
@@ -55,9 +67,8 @@ class MeasureViewModel(application: Application) : BaseViewModel(application) {
                 .subscribeWith(object : DisposableSingleObserver<List<Station>>() {
                     override fun onSuccess(stationsList: List<Station>) {
                         //TODO implement storing in database every 24 hours
-                        retrieveStations(stationsList as ArrayList<Station>)
-//                        storeDogInDatabase(stationsList)
-//                        SharedPreferencesHelper.invoke(getApplication()).saveTimeOfUpd(System.nanoTime())
+                        storeStationsInDatabase(stationsList)
+                        SharedPreferencesHelper.invoke(getApplication()).saveTimeOfUpd(System.nanoTime())
                     }
 
                     // get an error
@@ -80,7 +91,7 @@ class MeasureViewModel(application: Application) : BaseViewModel(application) {
                     override fun onSuccess(stationsKeywordsList: List<StationKeyword>) {
                         //TODO implement storing in database every 24 hours
                         retrieveStationsKeywords(stationsKeywordsList as ArrayList<StationKeyword>)
-//                        storeDogInDatabase(stationsList)
+//                        storeStationsInDatabase(stationsList)
 //                        SharedPreferencesHelper.invoke(getApplication()).saveTimeOfUpd(System.nanoTime())
                     }
 
@@ -92,6 +103,24 @@ class MeasureViewModel(application: Application) : BaseViewModel(application) {
                 })
         )
     }
+
+    // initiate and handle data in database
+    private fun storeStationsInDatabase(stationsList: List<Station>) {
+        //launch code in separate thread in Coroutine scope
+        launch {
+            val dao = StationsDatabase(getApplication()).stationDAO()
+            dao.deleteAllStations()
+            // argument is an expanded list of individual elements
+            val result = dao.insertAll(*stationsList.toTypedArray())
+            // update receiver list with assigning uuId to the right objects
+            for (i in stationsList.indices) {
+                stationsList[i].uuid = result[i].toInt()
+            }
+            Log.i("StationsInDb", "storeStationsInDatabase: ")
+            retrieveStations(stationsList as ArrayList<Station>)
+        }
+    }
+
 
     fun isUserStationInStationsKeywords(userStationsName: String): Boolean? {
         return mStationsKeywords.value?.any { station -> station.keyword == userStationsName }

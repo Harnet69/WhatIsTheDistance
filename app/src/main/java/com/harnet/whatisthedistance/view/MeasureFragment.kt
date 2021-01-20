@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import com.harnet.whatisthedistance.R
 import com.harnet.whatisthedistance.model.StationKeyword
+import com.harnet.whatisthedistance.util.SharedPreferencesHelper
 import com.harnet.whatisthedistance.viewModel.MeasureViewModel
 import kotlinx.android.synthetic.main.measure_fragment.*
 
