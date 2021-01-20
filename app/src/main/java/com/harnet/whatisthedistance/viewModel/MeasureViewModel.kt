@@ -2,6 +2,7 @@ package com.harnet.whatisthedistance.viewModel
 
 import android.app.Application
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.SphericalUtil
@@ -15,6 +16,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableSingleObserver
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class MeasureViewModel(application: Application) : BaseViewModel(application) {
@@ -31,24 +33,39 @@ class MeasureViewModel(application: Application) : BaseViewModel(application) {
     val mIsLoading = MutableLiveData<Boolean>()
     val mErrorMsg = MutableLiveData<String>()
 
-    // TODO when the time to update from API
-    fun refreshFromApi() {
+    fun refresh() {
+        // TODO implement the time check
+        if (false) {
+            refreshFromApi()
+        } else {
+            refreshFromDb()
+        }
+    }
+
+    // when the time to update from API
+    private fun refreshFromApi() {
         getDataFromAPIs()
     }
 
-    // TODO when lost less when 24 hours
-    fun refreshFromDb() {
-        getDataFromAPIs()
+    // when lost less when 24 hours
+    private fun refreshFromDb() {
+        getDataFromDbs()
     }
 
-    private fun getDataFromAPIs(){
+    private fun getDataFromAPIs() {
         getStationsFromApi()
         getStationsKeywordsFromApi()
+        launch(Dispatchers.Main) {
+            Toast.makeText(getApplication(), "Data from API", Toast.LENGTH_SHORT).show()
+        }
     }
 
-    private fun getDataFromDbs(){
+    private fun getDataFromDbs() {
         fetchStationsFromDatabase()
         fetchStationsKeywordsFromDatabase()
+        launch(Dispatchers.Main) {
+            Toast.makeText(getApplication(), "Data from database", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun retrieveStations(stationsList: ArrayList<Station>) {
@@ -80,7 +97,8 @@ class MeasureViewModel(application: Application) : BaseViewModel(application) {
                     override fun onSuccess(stationsList: List<Station>) {
                         //TODO implement storing in database every 24 hours
                         storeStationsInDatabase(stationsList)
-                        SharedPreferencesHelper.invoke(getApplication()).saveTimeOfUpd(System.nanoTime())
+                        SharedPreferencesHelper.invoke(getApplication())
+                            .saveTimeOfUpd(System.nanoTime())
                     }
 
                     // get an error
@@ -103,7 +121,8 @@ class MeasureViewModel(application: Application) : BaseViewModel(application) {
                     override fun onSuccess(stationsKeywordsList: List<StationKeyword>) {
                         //TODO implement storing in database every 24 hours
                         storeStationsKeywordsInDatabase(stationsKeywordsList)
-                        SharedPreferencesHelper.invoke(getApplication()).saveTimeOfUpd(System.nanoTime())
+                        SharedPreferencesHelper.invoke(getApplication())
+                            .saveTimeOfUpd(System.nanoTime())
                     }
 
                     // get an error
@@ -151,18 +170,21 @@ class MeasureViewModel(application: Application) : BaseViewModel(application) {
 
     // TODO when last less when 24 hours after the last update form API
     // get data from stations database
-    private fun fetchStationsFromDatabase(){
+    private fun fetchStationsFromDatabase() {
         launch {
-            val stationsFromDb = StationsDatabase.invoke(getApplication()).stationDAO().getAllStations()
+            val stationsFromDb =
+                StationsDatabase.invoke(getApplication()).stationDAO().getAllStations()
             retrieveStations(stationsFromDb as ArrayList<Station>)
         }
     }
 
     // TODO when last less when 24 hours after the last update form API
     // get data from stations kezwords database
-    private fun fetchStationsKeywordsFromDatabase(){
+    private fun fetchStationsKeywordsFromDatabase() {
         launch {
-            val stationsKeywordsFromDb = StationsKeywordsDatabase.invoke(getApplication()).stationsKeywordsDAO().getAllStationsKeywords()
+            val stationsKeywordsFromDb =
+                StationsKeywordsDatabase.invoke(getApplication()).stationsKeywordsDAO()
+                    .getAllStationsKeywords()
             retrieveStationsKeywords(stationsKeywordsFromDb as ArrayList<StationKeyword>)
         }
     }

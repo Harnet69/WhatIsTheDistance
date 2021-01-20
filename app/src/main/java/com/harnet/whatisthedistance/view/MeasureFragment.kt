@@ -30,7 +30,7 @@ class MeasureFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this).get(MeasureViewModel::class.java)
 
-        viewModel.refreshFromApi()
+        viewModel.refresh()
 
         observeViewModel()
     }
