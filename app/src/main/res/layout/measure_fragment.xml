@@ -22,21 +22,21 @@
         <com.google.android.material.textfield.MaterialAutoCompleteTextView
             android:id="@+id/dep_st"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:hint="@string/departure_station" />
 
         <com.google.android.material.textfield.MaterialAutoCompleteTextView
             android:id="@+id/arr_st"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:hint="@string/arrival_station" />
 
         <Button
             android:id="@+id/calc_btn"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="30dp"
             android:layout_weight="1"
