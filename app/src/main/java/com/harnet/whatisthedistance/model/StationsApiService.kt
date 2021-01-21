@@ -4,8 +4,9 @@ import io.reactivex.Single
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Inject
 
-class StationsApiService {
+class StationsApiService @Inject constructor() {
     // base URL of the API
     private val BASE_URL = "https://koleo.pl"
     // object created by Retrofit for accessing to an endpoint
