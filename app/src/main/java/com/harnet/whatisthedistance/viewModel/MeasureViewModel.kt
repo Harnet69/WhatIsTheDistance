@@ -233,6 +233,12 @@ class MeasureViewModel(application: Application) : BaseViewModel(application) {
         val arrId = getStationIdByKeyword(arrKeyword)
         val depCoords = depId?.let { getStationCoords(it) }
         val arrCoords = arrId?.let { getStationCoords(it) }
+
+        // if station location is zero
+        if(depCoords?.let { isLocationIsZero(it) } == true || arrCoords?.let { isLocationIsZero(it) } == true){
+            return null
+        }
+
         if (depCoords != null && arrCoords != null) {
             return SphericalUtil.computeDistanceBetween(depCoords, arrCoords) / 1000
         }
@@ -243,6 +249,13 @@ class MeasureViewModel(application: Application) : BaseViewModel(application) {
         val df = DecimalFormat("#.##")
         df.roundingMode = RoundingMode.CEILING
         return df.format(number).toDouble()
+    }
+
+    private fun isLocationIsZero(stationsCoords: LatLng): Boolean {
+        if(stationsCoords.latitude == 0.00 || stationsCoords.longitude == 0.00){
+            return true
+        }
+        return false
     }
 
     override fun onCleared() {
