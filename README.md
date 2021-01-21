@@ -20,7 +20,8 @@
  - DataBinding as OOP principle in frontend
  - Retrofit as a manager of interactions with APIs 
  - SQLite database as local storage
- - Room as a mapper of applications classes to a local database 
+ - Room as a mapper of applications classes to a local database
+ - Dagger2 as dependency injection manager
  - SharedPreferences as local storage of application settings
  - Coroutines as substitution of deprecated AsyncTask
  - SonarCloud service as code quality manager
