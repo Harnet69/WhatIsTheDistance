@@ -33,11 +33,13 @@ class MeasureViewModel(application: Application) : BaseViewModel(application) {
     val mStationsKeywords = MutableLiveData<ArrayList<StationKeyword>>()
     val mIsLoading = MutableLiveData<Boolean>()
     val mErrorMsg = MutableLiveData<String>()
+    val mIsInternet = MutableLiveData<Boolean>()
 
     fun refresh() {
-        // is time to update time check
-        //TODO chack Internet connection
+        // is time to update time check and check Internet connection
         val isInternet = isOnline(getApplication())
+        mIsInternet.value = isInternet
+
         if (isTimeForUpd() && isInternet) {
             refreshFromApi()
         } else {
@@ -47,6 +49,7 @@ class MeasureViewModel(application: Application) : BaseViewModel(application) {
 
     // when the time to update from API
     private fun refreshFromApi() {
+        mIsInternet.value = true
         getDataFromAPIs()
     }
 
@@ -98,7 +101,7 @@ class MeasureViewModel(application: Application) : BaseViewModel(application) {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableSingleObserver<List<Station>>() {
                     override fun onSuccess(stationsList: List<Station>) {
-                        //TODO implement storing in database every 24 hours
+                        //storing in a database
                         storeStationsInDatabase(stationsList)
                         SharedPreferencesHelper.invoke(getApplication())
                             .saveTimeOfUpd(System.currentTimeMillis())
@@ -122,7 +125,6 @@ class MeasureViewModel(application: Application) : BaseViewModel(application) {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableSingleObserver<List<StationKeyword>>() {
                     override fun onSuccess(stationsKeywordsList: List<StationKeyword>) {
-                        //TODO implement storing in database every 24 hours
                         storeStationsKeywordsInDatabase(stationsKeywordsList)
                         SharedPreferencesHelper.invoke(getApplication())
                             .saveTimeOfUpd(System.currentTimeMillis())
@@ -171,7 +173,6 @@ class MeasureViewModel(application: Application) : BaseViewModel(application) {
         }
     }
 
-    // TODO when last less when 24 hours after the last update form API
     // get data from stations database
     private fun fetchStationsFromDatabase() {
         launch {
@@ -181,7 +182,6 @@ class MeasureViewModel(application: Application) : BaseViewModel(application) {
         }
     }
 
-    // TODO when last less when 24 hours after the last update form API
     // get data from stations kezwords database
     private fun fetchStationsKeywordsFromDatabase() {
         launch {
@@ -199,6 +199,8 @@ class MeasureViewModel(application: Application) : BaseViewModel(application) {
             if (lastUpd != null) {
                 return (lastUpd + UPDATE_TIME) < System.currentTimeMillis()
             }
+        } else {
+            mIsInternet.value = false
         }
         return true
     }

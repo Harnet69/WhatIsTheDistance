@@ -1,6 +1,7 @@
 package com.harnet.whatisthedistance.view
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +15,6 @@ import com.harnet.whatisthedistance.R
 import com.harnet.whatisthedistance.model.StationKeyword
 import com.harnet.whatisthedistance.viewModel.MeasureViewModel
 import kotlinx.android.synthetic.main.measure_fragment.*
-
 
 class MeasureFragment : Fragment() {
     private lateinit var viewModel: MeasureViewModel
@@ -57,6 +57,17 @@ class MeasureFragment : Fragment() {
                 measure_error_msg.text = "Smth wrong $e"
             }
         })
+
+        viewModel.mIsInternet.observeForever { isInternet ->
+            if(isInternet){
+                measure_isInternet.visibility = View.GONE
+                Log.i("isInternet", "Internet")
+            }else{
+                measure_isInternet.visibility = View.VISIBLE
+                measure_progressBar.visibility = View.INVISIBLE
+                Log.i("isInternet", "No Internet")
+            }
+        }
     }
 
     //TODO implement a listener of a field completing, after which distance button arriving
@@ -87,7 +98,7 @@ class MeasureFragment : Fragment() {
             if (dep_st.text.toString() != "" && arr_st.text.toString() != "") {
                 if (viewModel.isUserStationInStationsKeywords(dep_st.text.toString()) == true) {
                     if (viewModel.isUserStationInStationsKeywords(arr_st.text.toString()) == true) {
-                        // TODO calculate distance
+                        // calculate distance
                         val distance = viewModel.calculateDistance(dep_st.text.toString(), arr_st.text.toString())
                         if(distance != null){
                             distance_res.text = viewModel.roundOffDecimal(distance).toString() + " km"
