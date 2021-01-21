@@ -1,7 +1,6 @@
 package com.harnet.whatisthedistance.viewModel
 
 import android.app.Application
-import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.maps.model.LatLng
@@ -212,7 +211,7 @@ class MeasureViewModel(application: Application) : BaseViewModel(application) {
     private fun getStationIdByKeyword(stationKeyword: String): Int? {
         val stations =
             mStationsKeywords.value?.filter { station -> station.keyword == stationKeyword }
-        return stations?.get(0)?.station_id
+        return stations?.get(0)?.stationId
     }
 
     private fun getStationCoords(stationId: Int): LatLng? {

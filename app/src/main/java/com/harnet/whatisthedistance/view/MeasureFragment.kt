@@ -102,7 +102,6 @@ class MeasureFragment : Fragment() {
                         val distance = viewModel.calculateDistance(dep_st.text.toString(), arr_st.text.toString())
                         if(distance != null){
                             distance_res.text = viewModel.roundOffDecimal(distance).toString() + " km"
-//                            Toast.makeText(context, "Distance: $distance", Toast.LENGTH_SHORT).show()
                         }else{
                             Toast.makeText(context, "Distance can't be calculated", Toast.LENGTH_SHORT).show()
                         }
