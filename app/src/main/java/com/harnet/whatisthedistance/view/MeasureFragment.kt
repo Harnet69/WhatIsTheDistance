@@ -105,13 +105,13 @@ class MeasureFragment : Fragment() {
                         if(distance != null){
                             distance_res.text = viewModel.roundOffDecimal(distance).toString() + " km"
                         }else{
-                            Toast.makeText(context, "Distance can't be calculated", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, "No coordinates yet for this place", Toast.LENGTH_SHORT).show()
                         }
                     } else {
-                        Toast.makeText(context, "Departure is unknown", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "Place ${arr_st.text.toString()} is unknown", Toast.LENGTH_SHORT).show()
                     }
                 } else {
-                    Toast.makeText(context, "Departure is unknown", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Place ${dep_st.text.toString()} is unknown", Toast.LENGTH_SHORT).show()
                 }
             } else {
                 Toast.makeText(context, "Fill both fields", Toast.LENGTH_SHORT).show()
