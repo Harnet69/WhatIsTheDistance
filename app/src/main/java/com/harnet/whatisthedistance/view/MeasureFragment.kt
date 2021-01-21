@@ -95,6 +95,8 @@ class MeasureFragment : Fragment() {
     private fun addDistanceBtn() {
         calc_btn.setOnClickListener {
             it.visibility = View.VISIBLE
+            //clear the distance field
+            distance_res.text = ""
             if (dep_st.text.toString() != "" && arr_st.text.toString() != "") {
                 if (viewModel.isUserStationInStationsKeywords(dep_st.text.toString()) == true) {
                     if (viewModel.isUserStationInStationsKeywords(arr_st.text.toString()) == true) {
