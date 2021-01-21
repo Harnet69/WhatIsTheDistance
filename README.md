@@ -1,11 +1,11 @@
-# What Is The Distance? [![SonarCloud](https://sonarcloud.io/images/project_badges/sonarcloud-white.svg)](https://sonarcloud.io/dashboard?id=Harnet69_WhatIsTheDistance)
+# ![App icon](https://github.com/Harnet69/WhatIsTheDistance/blob/master/app/GitHubFiles/app_ico_sm.png)What Is The Distance? 
 
-## App purposes: ![App icon](https://github.com/Harnet69/WhatIsTheDistance/blob/master/app/GitHubFiles/app_ico_sm.png)
+## App purposes: 
  - measuring the distance between two rail stations
  - working offline
  - showing a list of all stations
 
-## Technologies
+## Technologies [![SonarCloud](https://sonarcloud.io/images/project_badges/sonarcloud-white.svg)](https://sonarcloud.io/dashboard?id=Harnet69_WhatIsTheDistance)
  - Kotlin as a programming language
  - Google material design as UI pattern
  - MVVM as code architecture pattern
