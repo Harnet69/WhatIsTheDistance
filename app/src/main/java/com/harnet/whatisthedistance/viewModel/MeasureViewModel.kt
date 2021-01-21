@@ -9,7 +9,6 @@ import com.harnet.dogbreeds.model.StationsDatabase
 import com.harnet.whatisthedistance.model.Station
 import com.harnet.whatisthedistance.model.StationKeyword
 import com.harnet.whatisthedistance.model.StationsApiService
-import com.harnet.whatisthedistance.model.StationsKeywordsDatabase
 import com.harnet.whatisthedistance.util.SharedPreferencesHelper
 import com.harnet.whatisthedistance.util.isOnline
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -159,7 +158,7 @@ class MeasureViewModel(application: Application) : BaseViewModel(application) {
     private fun storeStationsKeywordsInDatabase(stationsKeywordsList: List<StationKeyword>) {
         //launch code in separate thread in Coroutine scope
         launch {
-            val dao = StationsKeywordsDatabase(getApplication()).stationsKeywordsDAO()
+            val dao = StationsDatabase(getApplication()).stationsKeywordsDAO()
             dao.deleteAllStationsKeywords()
             // argument is an expanded list of individual elements
             val result = dao.insertAll(*stationsKeywordsList.toTypedArray())
@@ -185,7 +184,7 @@ class MeasureViewModel(application: Application) : BaseViewModel(application) {
     private fun fetchStationsKeywordsFromDatabase() {
         launch {
             val stationsKeywordsFromDb =
-                StationsKeywordsDatabase.invoke(getApplication()).stationsKeywordsDAO()
+                StationsDatabase.invoke(getApplication()).stationsKeywordsDAO()
                     .getAllStationsKeywords()
             retrieveStationsKeywords(stationsKeywordsFromDb as ArrayList<StationKeyword>)
         }

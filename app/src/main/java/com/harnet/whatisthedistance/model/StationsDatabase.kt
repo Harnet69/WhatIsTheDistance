@@ -5,12 +5,15 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.harnet.whatisthedistance.model.Station
+import com.harnet.whatisthedistance.model.StationKeyword
+import com.harnet.whatisthedistance.model.StationsKeywordsDAO
 
 // singleton for handling with a database
-@Database(entities = arrayOf(Station::class), version = 1)
+@Database(entities = arrayOf(Station::class, StationKeyword::class), version = 1)
 abstract class StationsDatabase : RoomDatabase() {
     // return StationsDAO interface
     abstract fun stationDAO(): StationsDAO
+    abstract fun stationsKeywordsDAO(): StationsKeywordsDAO
 
     // create static methods and variables which can accessed from outside the class
     companion object {
