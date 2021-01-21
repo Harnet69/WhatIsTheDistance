@@ -1,7 +1,6 @@
 # What Is The Distance? [![SonarCloud](https://sonarcloud.io/images/project_badges/sonarcloud-white.svg)](https://sonarcloud.io/dashboard?id=Harnet69_WhatIsTheDistance)
 
-## App purposes:
-![QR](https://github.com/Harnet69/WhatIsTheDistance/blob/master/app/GitHubFiles/app_ico_sm.png)
+## App purposes: ![App icon](https://github.com/Harnet69/WhatIsTheDistance/blob/master/app/GitHubFiles/app_ico_sm.png)
  - measuring the distance between two rail stations
  - working offline
  - showing a list of all stations
