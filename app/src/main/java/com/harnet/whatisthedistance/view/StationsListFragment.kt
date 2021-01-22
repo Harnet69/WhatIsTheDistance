@@ -51,6 +51,15 @@ class StationsListFragment : Fragment() {
                 DividerItemDecoration.VERTICAL
             )
         )
+
+        // Swiper refresh listener(screen refreshing process)
+        refreshLayout_stationsList.setOnRefreshListener {
+            stationsList_errorMsg.visibility = View.GONE
+            stationsList_progressBar.visibility = View.VISIBLE
+            viewModel.refreshFromAPI()
+            refreshLayout_stationsList.isRefreshing = false // disappears little spinner on the top
+
+        }
     }
 
     private fun observeViewModel(){
