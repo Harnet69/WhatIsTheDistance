@@ -10,9 +10,6 @@ import io.reactivex.observers.DisposableSingleObserver
 import io.reactivex.schedulers.Schedulers
 
 class StationsListViewModel(application: Application) : BaseViewModel(application) {
-    private val stationsApiService = StationsApiService()
-    private val disposable = CompositeDisposable()
-
     val mStations = MutableLiveData<List<Station>>()
     val mStationsLoadError = MutableLiveData<Boolean>()
     val mStationsLoading = MutableLiveData<Boolean>()
@@ -34,7 +31,7 @@ class StationsListViewModel(application: Application) : BaseViewModel(applicatio
     private fun fetchFromRemoteWithRetrofit() {
         mStationsLoading.value = true
 
-        disposable.add(
+        super.stationsApiService.disposable.add(
             stationsApiService.getStations()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -62,6 +59,6 @@ class StationsListViewModel(application: Application) : BaseViewModel(applicatio
 
     override fun onCleared() {
         super.onCleared()
-        disposable.clear()
+        super.stationsApiService.disposable.clear()
     }
 }
