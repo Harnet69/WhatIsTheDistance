@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
 import androidx.core.content.edit
+import io.reactivex.disposables.CompositeDisposable
 
 class SharedPreferencesHelper {
     companion object {
