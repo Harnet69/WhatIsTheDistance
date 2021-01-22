@@ -1,5 +1,7 @@
-package com.harnet.whatisthedistance.model
+package com.harnet.whatisthedistance.model.retrofit
 
+import com.harnet.whatisthedistance.model.Station
+import com.harnet.whatisthedistance.model.StationKeyword
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import retrofit2.Retrofit
@@ -11,6 +13,7 @@ class StationsApiService @Inject constructor() {
     val disposable = CompositeDisposable()
     // base URL of the API
     private val BASE_URL = "https://koleo.pl"
+
     // object created by Retrofit for accessing to an endpoint
     private val stationsApi =  Retrofit.Builder()
         .baseUrl(BASE_URL)
@@ -23,7 +26,6 @@ class StationsApiService @Inject constructor() {
 
     private val stationsKeywordsApi =  Retrofit.Builder()
         .baseUrl(BASE_URL)
-        // handle all basic communication, separate threads, errors and converts JSON to object of our class
         .addConverterFactory(GsonConverterFactory.create())
         // convert this object to observable Single<List<>>
         .addCallAdapterFactory(RxJava2CallAdapterFactory.create())

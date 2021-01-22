@@ -1,8 +1,9 @@
-package com.harnet.whatisthedistance.model
+package com.harnet.whatisthedistance.model.room
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import com.harnet.whatisthedistance.model.StationKeyword
 
 @Dao
 interface StationsKeywordsDAO {

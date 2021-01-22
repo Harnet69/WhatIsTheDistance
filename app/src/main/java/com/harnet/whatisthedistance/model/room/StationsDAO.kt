@@ -1,4 +1,4 @@
-package com.harnet.dogbreeds.model
+package com.harnet.whatisthedistance.model.room
 
 import androidx.room.Dao
 import androidx.room.Insert

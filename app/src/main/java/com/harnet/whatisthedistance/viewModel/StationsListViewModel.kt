@@ -3,7 +3,7 @@ package com.harnet.whatisthedistance.viewModel
 import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import com.harnet.whatisthedistance.model.Station
-import com.harnet.whatisthedistance.model.StationsApiService
+import com.harnet.whatisthedistance.model.retrofit.StationsApiService
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableSingleObserver
