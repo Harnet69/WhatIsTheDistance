@@ -16,8 +16,7 @@ import com.harnet.whatisthedistance.util.isOnline
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.observers.DisposableSingleObserver
 import io.reactivex.schedulers.Schedulers
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import java.math.RoundingMode
 import java.text.DecimalFormat
 import javax.inject.Inject
@@ -64,9 +63,10 @@ class MeasureViewModel(application: Application) : BaseViewModel(application) {
     }
 
     private fun getDataFromDbs() {
-        fetchStationsFromDatabase()
-//        fetchStationsKeywordsFromDatabase()
-        fetchStationsKeywordsFromDatabaseOrderedByHits()
+        launch {
+            fetchStationsFromDatabase()
+            fetchStationsKeywordsFromDatabaseOrderedByHits()
+        }
         launch(Dispatchers.Main) {
             Toast.makeText(getApplication(), "Data from database", Toast.LENGTH_SHORT).show()
         }
@@ -158,17 +158,21 @@ class MeasureViewModel(application: Application) : BaseViewModel(application) {
     private fun storeStationsKeywordsInDatabase(stationsKeywordsList: List<StationKeyword>) {
         //launch code in separate thread in Coroutine scope
         launch {
-            val dao = StationsDatabase(getApplication()).stationsKeywordsDAO()
-            dao.deleteAllStationsKeywords()
-            // argument is an expanded list of individual elements
-            val result = dao.insertAll(*stationsKeywordsList.toTypedArray())
-            // update receiver list with assigning uuId to the right objects
-            for (i in stationsKeywordsList.indices) {
-                stationsKeywordsList[i].uuid = result[i].toInt()
-            }
+                val dao = StationsDatabase(getApplication()).stationsKeywordsDAO()
+                dao.deleteAllStationsKeywords()
+                // argument is an expanded list of individual elements
+                val result = dao.insertAll(*stationsKeywordsList.toTypedArray())
+                // update receiver list with assigning uuId to the right objects
+                for (i in stationsKeywordsList.indices) {
+                    stationsKeywordsList[i].uuid = result[i].toInt()
+                }
 
-            retrieveStationsKeywords(stationsKeywordsList as ArrayList<StationKeyword>)
+//            retrieveStationsKeywords(stationsKeywordsList as ArrayList<StationKeyword>)
+                //TODO make app to it only after data saving
+            delay(500L)
+                fetchStationsKeywordsFromDatabaseOrderedByHits()
         }
+
     }
 
     // get data from stations database
@@ -186,20 +190,24 @@ class MeasureViewModel(application: Application) : BaseViewModel(application) {
             val stationsKeywordsFromDb =
                 StationsDatabase.invoke(getApplication()).stationsKeywordsDAO()
                     .getAllStationsKeywords()
-            Log.i("statKeywordsQtt", "fetchStationsKeywordsFromDatabase: ${stationsKeywordsFromDb.size}")
+            Log.i(
+                "statKeywordsQtt",
+                "fetchStationsKeywordsFromDatabase: ${stationsKeywordsFromDb.size}"
+            )
             retrieveStationsKeywords(stationsKeywordsFromDb as ArrayList<StationKeyword>)
         }
     }
 
     // get data from stations keywords database
-    private fun fetchStationsKeywordsFromDatabaseOrderedByHits() {
-        launch {
-            val stationsKeywordsFromDb =
-                StationsDatabase.invoke(getApplication()).stationsKeywordsDAO()
-                    .getStationsKeywordsOrderedByHits()
-            Log.i("statKeywordsQtt", "fetchStationsKeywordsFromDatabase ordered: ${stationsKeywordsFromDb.size}")
-            retrieveStationsKeywords(stationsKeywordsFromDb as ArrayList<StationKeyword>)
-        }
+    private suspend fun fetchStationsKeywordsFromDatabaseOrderedByHits() {
+        val stationsKeywordsFromDb =
+            StationsDatabase.invoke(getApplication()).stationsKeywordsDAO()
+                .getStationsKeywordsOrderedByHits()
+        Log.i(
+            "statKeywordsQtt",
+            "2. fetchStationsKeywordsFromDatabase ordered: ${stationsKeywordsFromDb.size}"
+        )
+        retrieveStationsKeywords(stationsKeywordsFromDb as ArrayList<StationKeyword>)
     }
 
     // check if it's the time for update from API
@@ -227,7 +235,7 @@ class MeasureViewModel(application: Application) : BaseViewModel(application) {
 
     // sort stations by hits
     //TODO sort by hits
-    private fun sortStationsByHits(listStationsKeywords: List<StationKeyword>): List<StationKeyword>{
+    private fun sortStationsByHits(listStationsKeywords: List<StationKeyword>): List<StationKeyword> {
         return (listStationsKeywords as ArrayList<StationKeyword>).sortedBy { it.id }
     }
 
@@ -252,7 +260,7 @@ class MeasureViewModel(application: Application) : BaseViewModel(application) {
         val arrCoords = arrId?.let { getStationCoords(it) }
 
         // if station location is zero
-        if(depCoords?.let { isLocationIsZero(it) } == true || arrCoords?.let { isLocationIsZero(it) } == true){
+        if (depCoords?.let { isLocationIsZero(it) } == true || arrCoords?.let { isLocationIsZero(it) } == true) {
             return null
         }
 
@@ -269,7 +277,7 @@ class MeasureViewModel(application: Application) : BaseViewModel(application) {
     }
 
     private fun isLocationIsZero(stationsCoords: LatLng): Boolean {
-        if(stationsCoords.latitude == 0.00 || stationsCoords.longitude == 0.00){
+        if (stationsCoords.latitude == 0.00 || stationsCoords.longitude == 0.00) {
             return true
         }
         return false
