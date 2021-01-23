@@ -21,4 +21,7 @@ interface StationsKeywordsDAO {
 
     @Query("SELECT * FROM stationkeyword WHERE station_keyword_id = :id")
     suspend fun getStationKeyword(id: String): StationKeyword
+
+    @Query("SELECT sk.* FROM stationkeyword as sk JOIN station AS s ON sk.station_keyword_station_id = s.station_id ORDER BY s.hits DESC")
+    suspend fun getStationsKeywordsOrderedByHits(): List<StationKeyword>
 }

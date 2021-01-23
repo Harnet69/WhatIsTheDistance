@@ -1,6 +1,7 @@
 package com.harnet.whatisthedistance.viewModel
 
 import android.app.Application
+import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.maps.model.LatLng
@@ -64,7 +65,8 @@ class MeasureViewModel(application: Application) : BaseViewModel(application) {
 
     private fun getDataFromDbs() {
         fetchStationsFromDatabase()
-        fetchStationsKeywordsFromDatabase()
+//        fetchStationsKeywordsFromDatabase()
+        fetchStationsKeywordsFromDatabaseOrderedByHits()
         launch(Dispatchers.Main) {
             Toast.makeText(getApplication(), "Data from database", Toast.LENGTH_SHORT).show()
         }
@@ -184,6 +186,18 @@ class MeasureViewModel(application: Application) : BaseViewModel(application) {
             val stationsKeywordsFromDb =
                 StationsDatabase.invoke(getApplication()).stationsKeywordsDAO()
                     .getAllStationsKeywords()
+            Log.i("statKeywordsQtt", "fetchStationsKeywordsFromDatabase: ${stationsKeywordsFromDb.size}")
+            retrieveStationsKeywords(stationsKeywordsFromDb as ArrayList<StationKeyword>)
+        }
+    }
+
+    // get data from stations keywords database
+    private fun fetchStationsKeywordsFromDatabaseOrderedByHits() {
+        launch {
+            val stationsKeywordsFromDb =
+                StationsDatabase.invoke(getApplication()).stationsKeywordsDAO()
+                    .getStationsKeywordsOrderedByHits()
+            Log.i("statKeywordsQtt", "fetchStationsKeywordsFromDatabase ordered: ${stationsKeywordsFromDb.size}")
             retrieveStationsKeywords(stationsKeywordsFromDb as ArrayList<StationKeyword>)
         }
     }
@@ -209,6 +223,12 @@ class MeasureViewModel(application: Application) : BaseViewModel(application) {
         val stations =
             mStationsKeywords.value?.filter { station -> station.keyword == stationKeyword }
         return stations?.get(0)?.stationId
+    }
+
+    // sort stations by hits
+    //TODO sort by hits
+    private fun sortStationsByHits(listStationsKeywords: List<StationKeyword>): List<StationKeyword>{
+        return (listStationsKeywords as ArrayList<StationKeyword>).sortedBy { it.id }
     }
 
     private fun getStationCoords(stationId: Int): LatLng? {
