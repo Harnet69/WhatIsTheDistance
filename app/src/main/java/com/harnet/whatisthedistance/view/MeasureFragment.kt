@@ -59,13 +59,15 @@ class MeasureFragment : Fragment() {
         })
 
         viewModel.mIsInternet.observeForever { isInternet ->
-            if(isInternet){
-                measure_isInternet.visibility = View.GONE
-                Log.i("isInternet", "Internet")
-            }else{
-                measure_isInternet.visibility = View.VISIBLE
-                measure_progressBar.visibility = View.INVISIBLE
-                Log.i("isInternet", "No Internet")
+            isInternet?.let {
+                if(it){
+                    measure_isInternet.visibility = View.GONE
+                    Log.i("isInternet", "Internet")
+                }else{
+                    measure_isInternet.visibility = View.VISIBLE
+                    measure_progressBar.visibility = View.INVISIBLE
+                    Log.i("isInternet", "No Internet")
+                }
             }
         }
     }

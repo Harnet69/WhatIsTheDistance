@@ -65,13 +65,17 @@ class StationsListFragment : Fragment() {
     private fun observeViewModel(){
         viewModel.mStations.observe(viewLifecycleOwner, Observer { stationsList ->
             // notify adapter
-            stations_list_recyclerView.visibility = View.VISIBLE
-            stationsList_progressBar.visibility = View.INVISIBLE
-            stationsListAdapter.updateStationsList(stationsList as ArrayList<Station>)
+            if(!stationsList.isNullOrEmpty()) {
+                header_statiosList.visibility = View.VISIBLE
+                stations_list_recyclerView.visibility = View.VISIBLE
+                stationsList_progressBar.visibility = View.INVISIBLE
+                stationsListAdapter.updateStationsList(stationsList as ArrayList<Station>)
+            }
         })
 
         viewModel.mStationsLoadError.observe(viewLifecycleOwner, Observer {
             if(it){
+                header_statiosList.visibility = View.INVISIBLE
                 stations_list_recyclerView.visibility = View.INVISIBLE
                 stationsList_progressBar.visibility = View.INVISIBLE
                 stationsList_errorMsg.visibility = View.VISIBLE
