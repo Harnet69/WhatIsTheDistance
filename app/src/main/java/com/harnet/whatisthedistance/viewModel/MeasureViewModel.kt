@@ -23,7 +23,7 @@ import javax.inject.Inject
 
 class MeasureViewModel(application: Application) : BaseViewModel(application) {
     // time of refreshing from API
-    private val UPDATE_TIME: Long = 12_000L
+    private val UPDATE_TIME: Long = 30_000L
 
     val mStations = MutableLiveData<ArrayList<Station>>()
     val mStationsKeywords = MutableLiveData<ArrayList<StationKeyword>>()
@@ -167,15 +167,13 @@ class MeasureViewModel(application: Application) : BaseViewModel(application) {
                 for (i in stationsKeywordsList.indices) {
                     stationsKeywordsList[i].uuid = result[i].toInt()
                 }
-
-//            retrieveStationsKeywords(stationsKeywordsList as ArrayList<StationKeyword>)
-                //TODO make app to it only after data saving
             }
-            val load = launch {
-                fetchStationsKeywordsFromDatabaseOrderedByHits()
+            save.invokeOnCompletion {
+                launch {
+                    //TODO make app to it only after data saving
+                    fetchStationsKeywordsFromDatabaseOrderedByHits()
+                }
             }
-
-            load.invokeOnCompletion { save }
         }
 
     }
@@ -187,26 +185,11 @@ class MeasureViewModel(application: Application) : BaseViewModel(application) {
         retrieveStations(stationsFromDb as ArrayList<Station>)
     }
 
-    // get data from stations kezwords database
-    private fun fetchStationsKeywordsFromDatabase() {
-        launch {
-            val stationsKeywordsFromDb =
-                StationsDatabase.invoke(getApplication()).stationsKeywordsDAO()
-                    .getAllStationsKeywords()
-            Log.i(
-                "statKeywordsQtt",
-                "fetchStationsKeywordsFromDatabase: ${stationsKeywordsFromDb.size}"
-            )
-            retrieveStationsKeywords(stationsKeywordsFromDb as ArrayList<StationKeyword>)
-        }
-    }
-
     // get data from stations keywords database
     private suspend fun fetchStationsKeywordsFromDatabaseOrderedByHits() {
         val stationsKeywordsFromDb =
             StationsDatabase.invoke(getApplication()).stationsKeywordsDAO()
                 .getStationsKeywordsOrderedByHits()
-
         retrieveStationsKeywords(stationsKeywordsFromDb as ArrayList<StationKeyword>)
     }
 
@@ -284,12 +267,12 @@ class MeasureViewModel(application: Application) : BaseViewModel(application) {
     }
 
     // get if About modal window was showed
-    fun getIsAboutShowed(): Boolean?{
+    fun getIsAboutShowed(): Boolean? {
         return SharedPreferencesHelper.invoke(getApplication()).getIsAboutShowed()
     }
 
     // set if modal window with About app was showed
-    fun setIsAboutShowed(isShowed: Boolean){
+    fun setIsAboutShowed(isShowed: Boolean) {
         SharedPreferencesHelper.invoke(getApplication()).setIsAboutShowed(isShowed)
     }
 
