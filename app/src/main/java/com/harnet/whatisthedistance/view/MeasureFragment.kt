@@ -44,11 +44,11 @@ class MeasureFragment : Fragment() {
     }
 
     private fun observeViewModel() {
-        viewModel.mStations.observe(viewLifecycleOwner, Observer { stationsList ->
+        viewModel.mStations.observe(viewLifecycleOwner, { stationsList ->
             measure_progressBar.visibility = View.INVISIBLE
         })
 
-        viewModel.mStationsKeywords.observe(viewLifecycleOwner, Observer { stationsKeywordsList ->
+        viewModel.mStationsKeywords.observe(viewLifecycleOwner, { stationsKeywordsList ->
             measure_progressBar.visibility = View.INVISIBLE
             search_block_measureFragment.visibility = View.VISIBLE
             setToAutoComplete(dep_st, stationsKeywordsList)
@@ -57,7 +57,7 @@ class MeasureFragment : Fragment() {
             addDistanceBtn()
         })
 
-        viewModel.mErrorMsg.observe(viewLifecycleOwner, Observer { e ->
+        viewModel.mErrorMsg.observe(viewLifecycleOwner, { e ->
             if (e != null) {
                 search_block_measureFragment.visibility = View.INVISIBLE
                 measure_progressBar.visibility = View.INVISIBLE
@@ -148,7 +148,7 @@ class MeasureFragment : Fragment() {
     private fun showAboutDialog(){
         if(!viewModel.getIsAboutShowed()!!){
             AlertDialog.Builder(context)
-                .setIcon(android.R.drawable.ic_dialog_info)
+                .setIcon(R.drawable.ic_distance)
                 .setTitle(R.string.app_about_title)
                 .setMessage(R.string.app_about_text)
                 .setPositiveButton(R.string.app_about_agree) { dialogInterface: DialogInterface, i: Int ->
