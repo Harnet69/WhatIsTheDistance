@@ -157,7 +157,8 @@ class MeasureViewModel(application: Application) : BaseViewModel(application) {
     // initiate and handle data in stations keywords database
     private fun storeStationsKeywordsInDatabase(stationsKeywordsList: List<StationKeyword>) {
         //launch code in separate thread in Coroutine scope
-        launch {
+        runBlocking {
+            val save = launch {
                 val dao = StationsDatabase(getApplication()).stationsKeywordsDAO()
                 dao.deleteAllStationsKeywords()
                 // argument is an expanded list of individual elements
@@ -169,19 +170,21 @@ class MeasureViewModel(application: Application) : BaseViewModel(application) {
 
 //            retrieveStationsKeywords(stationsKeywordsList as ArrayList<StationKeyword>)
                 //TODO make app to it only after data saving
-            delay(500L)
+            }
+            val load = launch {
                 fetchStationsKeywordsFromDatabaseOrderedByHits()
+            }
+
+            load.invokeOnCompletion { save }
         }
 
     }
 
     // get data from stations database
-    private fun fetchStationsFromDatabase() {
-        launch {
-            val stationsFromDb =
-                StationsDatabase.invoke(getApplication()).stationDAO().getAllStations()
-            retrieveStations(stationsFromDb as ArrayList<Station>)
-        }
+    private suspend fun fetchStationsFromDatabase() {
+        val stationsFromDb =
+            StationsDatabase.invoke(getApplication()).stationDAO().getAllStations()
+        retrieveStations(stationsFromDb as ArrayList<Station>)
     }
 
     // get data from stations kezwords database
@@ -203,10 +206,7 @@ class MeasureViewModel(application: Application) : BaseViewModel(application) {
         val stationsKeywordsFromDb =
             StationsDatabase.invoke(getApplication()).stationsKeywordsDAO()
                 .getStationsKeywordsOrderedByHits()
-        Log.i(
-            "statKeywordsQtt",
-            "2. fetchStationsKeywordsFromDatabase ordered: ${stationsKeywordsFromDb.size}"
-        )
+
         retrieveStationsKeywords(stationsKeywordsFromDb as ArrayList<StationKeyword>)
     }
 
@@ -281,6 +281,16 @@ class MeasureViewModel(application: Application) : BaseViewModel(application) {
             return true
         }
         return false
+    }
+
+    // get if About modal window was showed
+    fun getIsAboutShowed(): Boolean?{
+        return SharedPreferencesHelper.invoke(getApplication()).getIsAboutShowed()
+    }
+
+    // set if modal window with About app was showed
+    fun setIsAboutShowed(isShowed: Boolean){
+        SharedPreferencesHelper.invoke(getApplication()).setIsAboutShowed(isShowed)
     }
 
     override fun onCleared() {

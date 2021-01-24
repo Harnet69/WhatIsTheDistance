@@ -31,6 +31,7 @@ class SharedPreferencesHelper {
         }
     }
 
+
     // save current time to SharedPreferences
     fun saveTimeOfUpd(time: Long) {
         prefs?.edit(commit = true) {
@@ -42,6 +43,9 @@ class SharedPreferencesHelper {
     fun getLastUpdateTime(): Long? {
         return prefs?.getLong(UPD_TIME, 0)
     }
+
+    // get is About app was showed
+    fun getIsAboutShowed() = prefs?.getBoolean(IS_ABOUT_SHOWED, false)
 
     // set is About app was showed
     fun setIsAboutShowed(isShowed: Boolean){

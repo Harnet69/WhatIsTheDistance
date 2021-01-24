@@ -1,5 +1,8 @@
 package com.harnet.whatisthedistance.view
 
+import android.app.AlertDialog
+import android.content.DialogInterface
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,12 +12,15 @@ import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.harnet.whatisthedistance.R
 import com.harnet.whatisthedistance.model.StationKeyword
 import com.harnet.whatisthedistance.viewModel.MeasureViewModel
 import kotlinx.android.synthetic.main.measure_fragment.*
+import java.io.IOException
+
 
 class MeasureFragment : Fragment() {
     private lateinit var viewModel: MeasureViewModel
@@ -29,6 +35,8 @@ class MeasureFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this).get(MeasureViewModel::class.java)
+
+        showAboutDialog()
 
         viewModel.refresh()
 
@@ -103,21 +111,62 @@ class MeasureFragment : Fragment() {
                 if (viewModel.isUserStationInStationsKeywords(dep_st.text.toString()) == true) {
                     if (viewModel.isUserStationInStationsKeywords(arr_st.text.toString()) == true) {
                         // calculate distance
-                        val distance = viewModel.calculateDistance(dep_st.text.toString(), arr_st.text.toString())
+                        val distance = viewModel.calculateDistance(
+                            dep_st.text.toString(),
+                            arr_st.text.toString()
+                        )
                         if(distance != null){
                             distance_res.text = viewModel.roundOffDecimal(distance).toString() + " km"
                         }else{
-                            Toast.makeText(context, "No coordinates yet for this place", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                context,
+                                "No coordinates yet for this place",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                     } else {
-                        Toast.makeText(context, "Place ${arr_st.text.toString()} is unknown", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            context,
+                            "Place ${arr_st.text.toString()} is unknown",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 } else {
-                    Toast.makeText(context, "Place ${dep_st.text.toString()} is unknown", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        context,
+                        "Place ${dep_st.text.toString()} is unknown",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             } else {
                 Toast.makeText(context, "Fill both fields", Toast.LENGTH_SHORT).show()
             }
+        }
+    }
+
+    // show About app dialog window
+    private fun showAboutDialog(){
+        if(!viewModel.getIsAboutShowed()!!){
+            AlertDialog.Builder(context)
+                .setIcon(android.R.drawable.ic_dialog_info)
+                .setTitle("About the app")
+                .setMessage("This is the best app for measuring the distance between two rail stations")
+                .setPositiveButton("Got it") { dialogInterface: DialogInterface, i: Int ->
+                    try {
+                        viewModel.setIsAboutShowed(true)
+                        val ft: FragmentTransaction = requireFragmentManager().beginTransaction()
+                        if (Build.VERSION.SDK_INT >= 26) {
+                            ft.setReorderingAllowed(false)
+                        }
+                        ft.detach(this).attach(this).commit()
+                    } catch (e: IOException) {
+                        e.printStackTrace()
+                    }
+                }.show()
+
+
+//            Navigation.findNavController(dep_st).navigate(MeasureFragmentDirections.actionMeasureFragmentToStationsListFragment())
+
         }
     }
 
