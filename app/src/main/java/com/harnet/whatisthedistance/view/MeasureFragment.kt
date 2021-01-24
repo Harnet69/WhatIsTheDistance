@@ -149,12 +149,13 @@ class MeasureFragment : Fragment() {
         if(!viewModel.getIsAboutShowed()!!){
             AlertDialog.Builder(context)
                 .setIcon(android.R.drawable.ic_dialog_info)
-                .setTitle("About the app")
-                .setMessage("This is the best app for measuring the distance between two rail stations")
-                .setPositiveButton("Got it") { dialogInterface: DialogInterface, i: Int ->
+                .setTitle(R.string.app_about_title)
+                .setMessage(R.string.app_about_text)
+                .setPositiveButton(R.string.app_about_agree) { dialogInterface: DialogInterface, i: Int ->
                     try {
                         viewModel.setIsAboutShowed(true)
-                        val ft: FragmentTransaction = requireFragmentManager().beginTransaction()
+                        // refresh the fragment
+                        val ft: FragmentTransaction = parentFragmentManager.beginTransaction()
                         if (Build.VERSION.SDK_INT >= 26) {
                             ft.setReorderingAllowed(false)
                         }
@@ -163,12 +164,6 @@ class MeasureFragment : Fragment() {
                         e.printStackTrace()
                     }
                 }.show()
-
-
-//            Navigation.findNavController(dep_st).navigate(MeasureFragmentDirections.actionMeasureFragmentToStationsListFragment())
-
         }
     }
-
-
 }
