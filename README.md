@@ -7,7 +7,7 @@
 ## Application installation:
 - scan this QR code by an Android phone, download and install the app 
 ![QR](https://github.com/Harnet69/WhatIsTheDistance/blob/master/app/GitHubFiles/app_QR.png)
-- download .apk [WhatIsTheDistance v.1.2 installer](https://drive.google.com/file/d/1CpgAtN9g91qZjXRu9BiX_5ZHKRJ8jxUk/view?usp=sharing) and run it on Android phone
+- download .apk [WhatIsTheDistance v.1.2.1 installer](https://drive.google.com/file/d/1zsniAj63bvOyeEgCy_eL9cFQUeacRttv/view?usp=sharing) and run it on Android phone
 - clone a project code from this repo to your computer and run it via Android studio or another Android emulator
 
 ## Technologies [![SonarCloud](https://sonarcloud.io/images/project_badges/sonarcloud-white.svg)](https://sonarcloud.io/dashboard?id=Harnet69_WhatIsTheDistance)
