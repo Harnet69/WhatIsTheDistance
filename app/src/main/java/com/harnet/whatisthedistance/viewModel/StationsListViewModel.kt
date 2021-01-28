@@ -2,17 +2,16 @@ package com.harnet.whatisthedistance.viewModel
 
 import android.app.Application
 import androidx.lifecycle.MutableLiveData
+import com.harnet.whatisthedistance.repository.StationsRepository
 import com.harnet.whatisthedistance.model.Station
-import com.harnet.whatisthedistance.model.retrofit.StationsApiService
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.observers.DisposableSingleObserver
-import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class StationsListViewModel(application: Application) : BaseViewModel(application) {
     val mStations = MutableLiveData<List<Station>>()
     val mStationsLoadError = MutableLiveData<Boolean>()
     val mStationsLoading = MutableLiveData<Boolean>()
+    val stationsRepository = StationsRepository(getApplication())
 
     // retrieve stations and set UI components
     private fun retrieveStations(stationsList: List<Station>) {
@@ -23,42 +22,16 @@ class StationsListViewModel(application: Application) : BaseViewModel(applicatio
 
     //refresh information from remote API
     fun refreshFromAPI() {
-        fetchFromRemoteWithRetrofit()
-
-    }
-
-    // fetches data with Retrofit library from remote API
-    private fun fetchFromRemoteWithRetrofit() {
-        mStationsLoading.value = true
-
-        super.stationsApiService.disposable.add(
-            stationsApiService.getStations()
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(object : DisposableSingleObserver<List<Station>>() {
-                    // get list of stations objects
-                    override fun onSuccess(stationsList: List<Station>) {
-                        //storing in database
-                        retrieveStations(sortById(stationsList as ArrayList<Station>))
-                    }
-
-                    // get an error
-                    override fun onError(e: Throwable) {
-                        mStationsLoadError.value = true
-                        mStationsLoading.value = false
-                        e.printStackTrace()
-                    }
-                })
-        )
+        launch {
+            val stList = stationsRepository.getAllStations()
+            launch(Dispatchers.Main) {
+                stList?.let { retrieveStations(sortById(it as ArrayList<Station>)) }
+            }
+        }
     }
 
     // sorted stations by it id
     private fun sortById(stationsList: ArrayList<Station>): ArrayList<Station> {
         return stationsList.sortedBy { it.id }.toCollection(ArrayList<Station>())
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        super.stationsApiService.disposable.clear()
     }
 }

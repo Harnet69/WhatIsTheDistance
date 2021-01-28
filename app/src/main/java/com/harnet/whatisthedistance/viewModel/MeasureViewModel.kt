@@ -9,8 +9,6 @@ import com.google.maps.android.SphericalUtil
 import com.harnet.whatisthedistance.model.room.StationsDatabase
 import com.harnet.whatisthedistance.model.Station
 import com.harnet.whatisthedistance.model.StationKeyword
-import com.harnet.whatisthedistance.model.di.DaggerStationsApiServiceComponent
-import com.harnet.whatisthedistance.model.retrofit.StationsApiService
 import com.harnet.whatisthedistance.util.SharedPreferencesHelper
 import com.harnet.whatisthedistance.util.isOnline
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -19,7 +17,6 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.*
 import java.math.RoundingMode
 import java.text.DecimalFormat
-import javax.inject.Inject
 
 class MeasureViewModel(application: Application) : BaseViewModel(application) {
     // time of refreshing from API
