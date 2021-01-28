@@ -4,14 +4,23 @@ import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import com.harnet.whatisthedistance.repository.StationsRepository
 import com.harnet.whatisthedistance.model.Station
+import com.harnet.whatisthedistance.model.di.DaggerStationsRepositoryComponent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 class StationsListViewModel(application: Application) : BaseViewModel(application) {
     val mStations = MutableLiveData<List<Station>>()
     val mStationsLoadError = MutableLiveData<Boolean>()
     val mStationsLoading = MutableLiveData<Boolean>()
-    val stationsRepository = StationsRepository(getApplication())
+
+    @Inject
+    lateinit var stationsRepository: StationsRepository
+
+    init {
+        val stationsRepositoryComponent = DaggerStationsRepositoryComponent.create()
+        stationsRepositoryComponent.inject(this)
+    }
 
     // retrieve stations and set UI components
     private fun retrieveStations(stationsList: List<Station>) {
@@ -23,7 +32,7 @@ class StationsListViewModel(application: Application) : BaseViewModel(applicatio
     //refresh information from remote API
     fun refreshFromAPI() {
         launch {
-            val stList = stationsRepository.getAllStations()
+            val stList = stationsRepository.getAllStations(getApplication())
             launch(Dispatchers.Main) {
                 stList?.let { retrieveStations(sortById(it as ArrayList<Station>)) }
             }
