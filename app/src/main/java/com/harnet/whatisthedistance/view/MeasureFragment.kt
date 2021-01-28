@@ -51,6 +51,7 @@ class MeasureFragment : Fragment() {
         viewModel.mStationsKeywords.observe(viewLifecycleOwner, { stationsKeywordsList ->
             measure_progressBar.visibility = View.INVISIBLE
             search_block_measureFragment.visibility = View.VISIBLE
+            Log.i("landscapeCrash", "observeViewModel: ${stationsKeywordsList.size}")
             setToAutoComplete(dep_st, stationsKeywordsList)
             setToAutoComplete(arr_st, stationsKeywordsList)
 
@@ -67,20 +68,20 @@ class MeasureFragment : Fragment() {
         })
 
         viewModel.mIsInternet.observeForever { isInternet ->
-            isInternet?.let {
-                if(it){
-                    measure_isInternet.visibility = View.GONE
-                    Log.i("isInternet", "Internet")
-                }else{
-                    measure_isInternet.visibility = View.VISIBLE
-                    measure_progressBar.visibility = View.INVISIBLE
-                    Log.i("isInternet", "No Internet")
+            measure_isInternet?.let {
+                isInternet?.let {internet ->
+                    if (internet) {
+                        it.visibility = View.INVISIBLE
+                        Log.i("isInternet", "Internet")
+                    } else {
+                        it.visibility = View.VISIBLE
+                        measure_progressBar.visibility = View.INVISIBLE
+                        Log.i("isInternet", "No Internet")
+                    }
                 }
             }
         }
     }
-
-    //TODO implement a listener of a field completing, after which distance button arriving
 
     private fun setToAutoComplete(
         autoCompleteTextView: AutoCompleteTextView,
@@ -98,6 +99,7 @@ class MeasureFragment : Fragment() {
                 stationsKeywordsList
             )
         }
+        Log.i("landscapeCrash", "setToAutoComplete: ${stationsKeywords.size}")
         autoCompleteTextView.setAdapter(arrayAdapter)
         autoCompleteTextView.threshold = 1
     }
@@ -115,9 +117,10 @@ class MeasureFragment : Fragment() {
                             dep_st.text.toString(),
                             arr_st.text.toString()
                         )
-                        if(distance != null){
-                            distance_res.text = viewModel.roundOffDecimal(distance).toString() + " km"
-                        }else{
+                        if (distance != null) {
+                            distance_res.text =
+                                viewModel.roundOffDecimal(distance).toString() + " km"
+                        } else {
                             Toast.makeText(
                                 context,
                                 "No coordinates yet for this place",
@@ -145,8 +148,8 @@ class MeasureFragment : Fragment() {
     }
 
     // show About app dialog window
-    private fun showAboutDialog(){
-        if(!viewModel.getIsAboutShowed()!!){
+    private fun showAboutDialog() {
+        if (!viewModel.getIsAboutShowed()!!) {
             AlertDialog.Builder(context)
                 .setIcon(R.drawable.ic_distance)
                 .setTitle(R.string.app_about_title)

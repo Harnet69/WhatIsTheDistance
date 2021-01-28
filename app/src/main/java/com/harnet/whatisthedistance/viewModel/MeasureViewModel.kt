@@ -84,6 +84,7 @@ class MeasureViewModel(application: Application) : BaseViewModel(application) {
     private fun retrieveStationsKeywords(stationsKeywordsList: ArrayList<StationKeyword>) {
         // set received list to observable mutable list
         mStationsKeywords.postValue(stationsKeywordsList)
+        Log.i("landscapeCrash", "retrieveStationsKeywords: ${stationsKeywordsList.size}")
         // switch off error message
         mErrorMsg.postValue(null)
         // switch off waiting spinner
