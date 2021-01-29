@@ -18,8 +18,7 @@ class StationsListViewModel(application: Application) : BaseViewModel(applicatio
     lateinit var stationsRepository: StationsRepository
 
     init {
-        val stationsRepositoryComponent = DaggerStationsRepositoryComponent.create()
-        stationsRepositoryComponent.inject(this)
+        DaggerStationsRepositoryComponent.create().inject(this)
     }
 
     // retrieve stations and set UI components
@@ -34,7 +33,7 @@ class StationsListViewModel(application: Application) : BaseViewModel(applicatio
         launch {
             val stList = stationsRepository.getAllStations(getApplication())
             launch(Dispatchers.Main) {
-                stList?.let { retrieveStations(sortById(it as ArrayList<Station>)) }
+                retrieveStations(sortById(stList as ArrayList<Station>))
             }
         }
     }
