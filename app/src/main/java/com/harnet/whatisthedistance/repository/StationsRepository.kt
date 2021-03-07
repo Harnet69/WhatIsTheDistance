@@ -5,7 +5,7 @@ import com.harnet.whatisthedistance.model.Station
 import com.harnet.whatisthedistance.model.room.StationsDatabase
 import javax.inject.Inject
 
-class StationsRepository @Inject constructor() {
+class StationsRepository {
 
     suspend fun getAllStations(context: Context): List<Station> {
         return StationsDatabase.invoke(context).stationDAO().getAllStations()
