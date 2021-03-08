@@ -1,13 +1,14 @@
 package com.harnet.whatisthedistance.repository
 
-import android.content.Context
 import com.harnet.whatisthedistance.model.Station
-import com.harnet.whatisthedistance.model.room.StationsDatabase
+import com.harnet.whatisthedistance.model.room.StationsDAO
 import javax.inject.Inject
 
-class StationsRepository {
+class StationsRepository @Inject constructor(private val stationDAO: StationsDAO): StationRepositoryInterface {
 
-    suspend fun getAllStations(context: Context): List<Station> {
-        return StationsDatabase.invoke(context).stationDAO().getAllStations()
+    override suspend fun getAllStations(): List<Station> {
+        //TODO here can be the problem
+//        return StationsDatabase.invoke(context).stationDAO().getAllStations()
+        return stationDAO.getAllStations()
     }
 }

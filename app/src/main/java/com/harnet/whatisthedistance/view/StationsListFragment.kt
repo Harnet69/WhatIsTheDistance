@@ -33,7 +33,7 @@ class StationsListFragment : Fragment() {
 
         stationsListAdapter = StationsListAdapter(arrayListOf())
 
-        viewModel = ViewModelProvider(this).get(StationsListViewModel::class.java)
+        viewModel = ViewModelProvider(requireActivity()).get(StationsListViewModel::class.java)
 
         viewModel.refreshFromAPI()
 
