@@ -15,11 +15,10 @@ import com.harnet.whatisthedistance.adapter.StationsListAdapter
 import com.harnet.whatisthedistance.model.Station
 import com.harnet.whatisthedistance.viewModel.StationsListViewModel
 import kotlinx.android.synthetic.main.stations_list_fragment.*
+import javax.inject.Inject
 
-class StationsListFragment : Fragment() {
+class StationsListFragment @Inject constructor(private val stationsListAdapter: StationsListAdapter) : Fragment() {
     private lateinit var viewModel: StationsListViewModel
-
-    private lateinit var stationsListAdapter: StationsListAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,8 +29,6 @@ class StationsListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        stationsListAdapter = StationsListAdapter(arrayListOf())
 
         viewModel = ViewModelProvider(requireActivity()).get(StationsListViewModel::class.java)
 
@@ -65,11 +62,11 @@ class StationsListFragment : Fragment() {
     private fun observeViewModel(){
         viewModel.mStations.observe(viewLifecycleOwner, Observer { stationsList ->
             // notify adapter
-            if(!stationsList.isNullOrEmpty()) {
+            if (!stationsList.isNullOrEmpty()) {
                 header_statiosList.visibility = View.VISIBLE
                 stations_list_recyclerView.visibility = View.VISIBLE
                 stationsList_progressBar.visibility = View.INVISIBLE
-                stationsListAdapter.updateStationsList(stationsList as ArrayList<Station>)
+                stationsListAdapter.stations = (stationsList as ArrayList<Station>)
             }
         })
 
