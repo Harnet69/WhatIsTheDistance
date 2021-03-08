@@ -12,12 +12,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class StationsListViewModel @ViewModelInject constructor(private val stationsRepository: StationRepositoryInterface)  : ViewModel() {
+class StationsListViewModel @ViewModelInject constructor(private val stationsRepository: StationRepositoryInterface) :
+    ViewModel() {
     val mStations = MutableLiveData<List<Station>>()
     val mStationsLoadError = MutableLiveData<Boolean>()
     val mStationsLoading = MutableLiveData<Boolean>()
-
-//    val stationsRepository: StationsRepository = StationsRepository()
 
     // retrieve stations and set UI components
     private fun retrieveStations(stationsList: List<Station>) {
