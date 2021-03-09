@@ -1,16 +1,13 @@
 package com.harnet.whatisthedistance.viewModel
 
-import android.app.Application
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.harnet.whatisthedistance.model.Station
 import com.harnet.whatisthedistance.repository.StationRepositoryInterface
-import com.harnet.whatisthedistance.repository.StationsRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 class StationsListViewModel @ViewModelInject constructor(private val stationsRepository: StationRepositoryInterface) :
     ViewModel() {
@@ -37,6 +34,6 @@ class StationsListViewModel @ViewModelInject constructor(private val stationsRep
 
     // sorted stations by it id
     private fun sortById(stationsList: ArrayList<Station>): ArrayList<Station> {
-        return stationsList.sortedBy { it.id }.toCollection(ArrayList<Station>())
+        return stationsList.sortedByDescending { it.id }.toCollection(ArrayList<Station>())
     }
 }

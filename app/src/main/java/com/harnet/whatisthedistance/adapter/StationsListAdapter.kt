@@ -12,18 +12,16 @@ import com.harnet.whatisthedistance.databinding.ItemStationBinding
 import com.harnet.whatisthedistance.model.Station
 import javax.inject.Inject
 
-class StationsListAdapter @Inject constructor(
-    private val glide: RequestManager
-):
+class StationsListAdapter @Inject constructor() :
     RecyclerView.Adapter<StationsListAdapter.StationsListViewHolder>() {
 
-    private val diffUtil = object : DiffUtil.ItemCallback<Station>(){
+    private val diffUtil = object : DiffUtil.ItemCallback<Station>() {
         override fun areItemsTheSame(oldItem: Station, newItem: Station): Boolean {
             return oldItem == newItem
         }
 
         override fun areContentsTheSame(oldItem: Station, newItem: Station): Boolean {
-            return oldItem == newItem
+            return oldItem.equals(newItem)
         }
     }
 

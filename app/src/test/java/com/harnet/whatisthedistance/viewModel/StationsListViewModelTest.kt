@@ -10,6 +10,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
+import java.lang.NumberFormatException
 
 @ExperimentalCoroutinesApi
 class StationsListViewModelTest {
@@ -18,20 +19,29 @@ class StationsListViewModelTest {
     //runs all in the Main thread
     @get:Rule
     var instantTaskExecutorRule: TestRule = InstantTaskExecutorRule()
+
     //because in Test folder there is not an emulator and no Main thread
     @get:Rule
     var mainCoroutineRule: MainCoroutineRule = MainCoroutineRule()
 
     @Before
-    fun setup(){
+    fun setup() {
         viewModel = StationsListViewModel(StationRepositoryFake())
     }
 
     @Test
-    fun`refresh from API returns stations list`(){
+    fun `refresh from API returns stations list`() {
         viewModel.refreshFromAPI()
         val value = viewModel.mStations.getOrAwaitValueTest()
         assertThat(value.size).isEqualTo(3)
+    }
+
+    @Test
+    fun `sort stations list return sorted`() {
+        viewModel.refreshFromAPI()
+        val value = viewModel.mStations.getOrAwaitValueTest()
+        val maxHitStation = value.maxByOrNull { it.hits.toInt() }
+        assertThat(value[0]).isEqualTo(maxHitStation)
     }
 
 }
